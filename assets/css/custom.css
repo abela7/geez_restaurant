@@ -1,0 +1,202 @@
+<?php
+/**
+ * Custom CSS for Geez Restaurant Application
+ */
+
+/* General Styles */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    margin-top: auto;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    top: 56px;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+@media (max-width: 767.98px) {
+    .sidebar {
+        position: static;
+        padding-top: 1.5rem;
+    }
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Form Styles */
+.required:after {
+    content: " *";
+    color: red;
+}
+
+/* Table Styles */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .print-only {
+        display: block !important;
+    }
+    
+    .container-fluid {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    body {
+        font-size: 12pt;
+    }
+    
+    .table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+    
+    .table td, .table th {
+        background-color: #fff !important;
+        border: 1px solid #ddd !important;
+    }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 0.75rem;
+    }
+    
+    .table th, .table td {
+        padding: 0.5rem;
+    }
+    
+    .btn-sm-block {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    transition: transform 0.3s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Status Indicators */
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.status-complete {
+    background-color: #28a745;
+}
+
+.status-incomplete {
+    background-color: #dc3545;
+}
+
+/* Temperature Range Indicators */
+.temp-normal {
+    color: #28a745;
+}
+
+.temp-warning {
+    color: #ffc107;
+}
+
+.temp-danger {
+    color: #dc3545;
+}
+
+/* Custom Checkboxes */
+.custom-checkbox-lg .custom-control-label::before,
+.custom-checkbox-lg .custom-control-label::after {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.custom-checkbox-lg .custom-control-label {
+    padding-left: 0.5rem;
+    padding-top: 0.25rem;
+}
+
+/* Task Lists */
+.task-list-item {
+    padding: 0.75rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.task-list-item:last-child {
+    border-bottom: none;
+}
+
+/* Date Picker Customization */
+.datepicker-dropdown {
+    padding: 0.5rem;
+}
+
+/* Report Containers */
+.report-container {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.report-header {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.report-footer {
+    border-top: 1px solid #dee2e6;
+    padding-top: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* Print Layout */
+.print-layout {
+    display: none;
+}
+
+@media print {
+    .print-layout {
+        display: block;
+    }
+    
+    .screen-layout {
+        display: none;
+    }
+}
