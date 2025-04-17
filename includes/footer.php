@@ -13,7 +13,6 @@
         <div class="container">
             <div class="d-flex justify-content-between">
                 <span class="text-muted">&copy; <?php echo date('Y'); ?> Geez Restaurant</span>
-                <span class="text-muted"><?php echo APP_NAME; ?> v<?php echo APP_VERSION; ?></span>
             </div>
         </div>
     </footer>
