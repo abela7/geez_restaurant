@@ -81,7 +81,7 @@ require_once INCLUDE_PATH . '/header.php';
                 
                 <div class="mt-4">
                     <a href="<?php echo BASE_URL; ?>/modules/auth/login.php" class="btn btn-primary btn-lg">
-                        <i class="bi bi-box-arrow-in-right"></i> Login to System
+                        <i class="bi bi-box-arrow-in-right"></i> LoginN to System
                     </a>
                 </div>
             </div>
