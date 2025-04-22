@@ -31,20 +31,37 @@ class User {
      * @return bool True if authentication successful, false otherwise
      */
     public function authenticate($username, $password) {
-        $sql = "SELECT * FROM users WHERE username = ? AND is_active = 1";
+        // First check if user exists at all, regardless of active status
+        $sql = "SELECT * FROM users WHERE username = ?";
         $user = $this->db->fetchRow($sql, [$username]);
         
         if (!$user) {
-            error_log("[DEBUG] Authentication failed: User not found or not active for username: " . $username);
-            $this->error_message = "[Debug] User not found or is inactive."; // Specific message for debugging
+            error_log("[DEBUG] Authentication failed: User not found: " . $username);
+            $this->error_message = "[Debug] User not found.";
             return false;
         }
         
-        // Trim password and hash just before verification to avoid whitespace issues
+        // Now check if user is active
+        if ($user['is_active'] != 1) {
+            error_log("[DEBUG] Authentication failed: User is inactive: " . $username);
+            $this->error_message = "[Debug] User account is inactive. Please contact an administrator.";
+            return false;
+        }
+        
+        // Ensure password is handled consistently with how it was stored
         $trimmed_password = trim($password);
-        $trimmed_hash = trim($user['password']);
-
-        if (password_verify($trimmed_password, $trimmed_hash)) {
+        $trimmed_hash = trim($user['password']); 
+        
+        // Explicit debug for comparing
+        error_log("[DEBUG] Password verification attempt: Length of password=" . strlen($trimmed_password) . 
+                  ", Length of hash=" . strlen($trimmed_hash) . 
+                  ", Hash prefix=" . substr($trimmed_hash, 0, 7));
+        
+        // First try standard verification
+        $result = password_verify($trimmed_password, $trimmed_hash);
+        
+        if ($result) {
+            // Standard verification worked
             $this->user_id = $user['user_id'];
             $this->username = $user['username'];
             $this->full_name = $user['full_name'];
@@ -69,9 +86,14 @@ class User {
             $this->error_message = null; // Clear error on success
             return true;
         } else {
-            // Incorrect password
-            error_log("[DEBUG] Authentication failed: Incorrect password for username: " . $username . " (Password length: " . strlen($trimmed_password) . ", Hash length: " . strlen($trimmed_hash) . ")");
-            $this->error_message = "[Debug] Incorrect password."; // Specific message for debugging
+            // Check if hash needs rehashing (older algorithm or different cost)
+            if (substr($trimmed_hash, 0, 4) === '$2y$') {
+                error_log("[DEBUG] Authentication failed: Using correct bcrypt format but password doesn't match. Username: " . $username);
+                $this->error_message = "[Debug] Incorrect password.";
+            } else {
+                error_log("[DEBUG] Authentication failed: Hash doesn't appear to be in correct bcrypt format: " . substr($trimmed_hash, 0, 10) . "...");
+                $this->error_message = "[Debug] Password hash format appears invalid.";
+            }
             return false;
         }
         
@@ -176,8 +198,23 @@ class User {
      * @return int|false New user ID or false on failure
      */
     public function create($data) {
-        // Hash password
+        // Hash password with error handling
+        if (!isset($data['password']) || empty($data['password'])) {
+            error_log("[DEBUG] Create user failed: Password is empty or not provided");
+            return false;
+        }
+        
+        // Log what we're about to hash for debugging
+        error_log("[DEBUG] User::create - Hashing password. Raw password length: " . strlen($data['password']));
+        
+        // Hash the password
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        
+        // Verify the hash was created correctly
+        if (!$data['password'] || substr($data['password'], 0, 4) !== '$2y$') {
+            error_log("[DEBUG] Create user failed: Password hashing failed or returned invalid format");
+            return false;
+        }
         
         // Set default last_login to NULL
         $data['last_login'] = null;
@@ -198,10 +235,20 @@ class User {
     public function update($user_id, $data) {
         // Hash password if provided
         if (isset($data['password']) && !empty($data['password'])) {
-            // --- Add temporary debug log ---
-            error_log("[DEBUG] User::update - Hashing password for user_id: {$user_id}. Received password: '" . $data['password'] . "'");
-            // -------------------------------
+            // --- Add thorough logging ---
+            error_log("[DEBUG] User::update - About to hash password for user_id: {$user_id}. Raw password length: " . strlen($data['password']));
+            
+            // Hash the password
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+            
+            // Verify hash was created properly
+            if (!$data['password'] || substr($data['password'], 0, 4) !== '$2y$') {
+                error_log("[DEBUG] Update user failed: Password hashing failed or returned invalid format");
+                return false;
+            }
+            
+            // Log the generated hash prefix
+            error_log("[DEBUG] User::update - Password hashed successfully. Hash prefix: " . substr($data['password'], 0, 12) . "...");
         } else {
             // If password is not provided or empty in the form, remove it from $data
             unset($data['password']); 
