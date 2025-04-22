@@ -95,6 +95,7 @@ $flash_message = getFlashMessage();
                 </div>
                 <?php endif; ?>
                 
+                <?php /* Comment out the main page title header section
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2"><?php echo isset($page_title) ? $page_title : APP_NAME; ?></h1>
                     <?php if (isset($page_actions)): ?>
@@ -103,3 +104,11 @@ $flash_message = getFlashMessage();
                     </div>
                     <?php endif; ?>
                 </div>
+                */ ?>
+
+                <?php // Main content starts here ?>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
