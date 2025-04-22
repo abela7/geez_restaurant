@@ -82,9 +82,6 @@ if (isPostRequest()) {
                     </div>
                 </form>
             </div>
-            <div class="card-footer text-center">
-                <p class="mb-0">Default admin login: <br>Username: <strong>admin</strong> / Password: <strong>admin123</strong></p>
-            </div>
         </div>
     </div>
 </div>
