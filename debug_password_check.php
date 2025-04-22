@@ -23,14 +23,17 @@ if (!file_exists($config_path)) {
 // require_once $bootstrap_path;
 require_once $config_path; // Changed to config.php
 
-echo "Configuration loaded.\n";
+// Manually include database config and class, then instantiate DB connection
+require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/classes/Database.php';
+$db = new Database(); 
+
+echo "Configuration and Database connection initialized.\n";
 
 // Check if the $db object (or your database connection variable) is available
-// Assuming your connection object is named $db and is an instance of your Database class
-global $db; // Ensure $db is in scope if defined globally in bootstrap.php
+// global $db; // No longer need global as we are instantiating here
 if (!isset($db) || !is_object($db) || !method_exists($db, 'fetchRow')) { 
-    echo "ERROR: Database connection object ($db) not found or doesn't have expected 'fetchRow' method after including bootstrap.php.\n";
-    echo "Please ensure your bootstrap file initializes the database connection correctly and makes it available (e.g., as a global variable or via a registry).\n";
+    echo "ERROR: Database connection object ($db) failed to initialize correctly or doesn't have expected 'fetchRow' method.\n";
     echo "</pre>";
     exit;
 }
