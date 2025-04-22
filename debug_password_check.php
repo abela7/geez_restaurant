@@ -8,18 +8,20 @@ $debug_password = '123456';
 
 // Attempt to include the main configuration/bootstrap file
 // Adjust the path if your main config file is different
-$bootstrap_path = __DIR__ . '/config/bootstrap.php';
+// $bootstrap_path = __DIR__ . '/config/bootstrap.php';
+$config_path = __DIR__ . '/config/config.php'; // Changed to config.php
 
-echo "Attempting to load configuration from: " . $bootstrap_path . "\n";
+echo "Attempting to load configuration from: " . $config_path . "\n";
 
-if (!file_exists($bootstrap_path)) {
-    echo "ERROR: Configuration file not found at '{$bootstrap_path}'. Please check the path.\n";
+if (!file_exists($config_path)) {
+    echo "ERROR: Configuration file not found at '{$config_path}'. Please check the path.\n";
     echo "Script cannot continue without database connection.\n";
     echo "</pre>";
     exit;
 }
 
-require_once $bootstrap_path;
+// require_once $bootstrap_path;
+require_once $config_path; // Changed to config.php
 
 echo "Configuration loaded.\n";
 
