@@ -35,8 +35,8 @@ class User {
         $user = $this->db->fetchRow($sql, [$username]);
         
         if (!$user) {
-            error_log("Authentication failed: User not found or not active for username: " . $username);
-            $this->error_message = "Invalid username or password."; // Keep generic message for user
+            error_log("[DEBUG] Authentication failed: User not found or not active for username: " . $username);
+            $this->error_message = "[Debug] User not found or is inactive."; // Specific message for debugging
             return false;
         }
         
@@ -66,14 +66,14 @@ class User {
             return true;
         } else {
             // Incorrect password
-            error_log("Authentication failed: Incorrect password for username: " . $username);
-            $this->error_message = "Invalid username or password."; // Keep generic message for user
+            error_log("[DEBUG] Authentication failed: Incorrect password for username: " . $username);
+            $this->error_message = "[Debug] Incorrect password."; // Specific message for debugging
             return false;
         }
         
         // This part should theoretically not be reached, but added for completeness
-        error_log("Authentication failed: Unknown reason for username: " . $username);
-        $this->error_message = "An unexpected error occurred during login.";
+        error_log("[DEBUG] Authentication failed: Unknown reason for username: " . $username);
+        $this->error_message = "[Debug] An unexpected error occurred during login.";
         return false;
     }
     
