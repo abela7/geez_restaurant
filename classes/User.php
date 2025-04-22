@@ -266,4 +266,16 @@ class User {
     public function getErrorMessage() {
         return $this->error_message;
     }
+    
+    /**
+     * Toggle user active status
+     * 
+     * @param int $user_id User ID
+     * @param bool $is_active New active status
+     * @return int Number of affected rows
+     */
+    public function toggleActive($user_id, $is_active) {
+        $data = ['is_active' => $is_active ? 1 : 0];
+        return $this->db->update('users', $data, 'user_id = ?', [$user_id]);
+    }
 }
