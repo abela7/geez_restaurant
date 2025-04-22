@@ -7,9 +7,9 @@
 
 // Database connection parameters
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'admi_geez_restaurant');
-define('DB_USER', 'admi_abel');
-define('DB_PASS', '21@27Abel');
+define('DB_NAME', 'admi_geez_db');
+define('DB_USER', 'admi_abela');
+define('DB_PASS', '21@27Abela');
 define('DB_CHARSET', 'utf8mb4');
 
 // PDO options
