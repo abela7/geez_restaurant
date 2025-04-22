@@ -36,7 +36,7 @@ if (isPostRequest()) {
                 setFlashMessage('Login successful. Welcome back!', 'success');
                 redirect(BASE_URL . '/dashboard.php');
             } else {
-                $error = 'Invalid username or password.';
+                $error = $user->getErrorMessage() ?? 'Invalid username or password.';
             }
         }
     }

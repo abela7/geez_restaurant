@@ -12,6 +12,7 @@ class User {
     private $initials;
     private $role;
     private $is_active;
+    private $error_message = null; // Added for detailed login errors
     
     /**
      * Constructor
@@ -33,7 +34,13 @@ class User {
         $sql = "SELECT * FROM users WHERE username = ? AND is_active = 1";
         $user = $this->db->fetchRow($sql, [$username]);
         
-        if ($user && password_verify($password, $user['password'])) {
+        if (!$user) {
+            error_log("Authentication failed: User not found or not active for username: " . $username);
+            $this->error_message = "Invalid username or password."; // Keep generic message for user
+            return false;
+        }
+        
+        if (password_verify($password, $user['password'])) {
             $this->user_id = $user['user_id'];
             $this->username = $user['username'];
             $this->full_name = $user['full_name'];
@@ -55,9 +62,18 @@ class User {
                 [$this->user_id]
             );
             
+            $this->error_message = null; // Clear error on success
             return true;
+        } else {
+            // Incorrect password
+            error_log("Authentication failed: Incorrect password for username: " . $username);
+            $this->error_message = "Invalid username or password."; // Keep generic message for user
+            return false;
         }
         
+        // This part should theoretically not be reached, but added for completeness
+        error_log("Authentication failed: Unknown reason for username: " . $username);
+        $this->error_message = "An unexpected error occurred during login.";
         return false;
     }
     
@@ -230,5 +246,14 @@ class User {
      */
     public function getCurrentUserFullName() {
         return $this->isLoggedIn() ? $_SESSION['full_name'] : null;
+    }
+    
+    /**
+     * Get the last authentication error message
+     *
+     * @return string|null Error message or null if no error
+     */
+    public function getErrorMessage() {
+        return $this->error_message;
     }
 }
