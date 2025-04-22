@@ -51,10 +51,10 @@ function getFlashMessage() {
  * 
  * @param string $redirect_url URL to redirect to if not logged in
  */
-function requireLogin($redirect_url = '/geez_restaurant/modules/auth/login.php') {
+function requireLogin($redirect_url = '/modules/auth/login.php') {
     if (!isset($_SESSION['user_id'])) {
         setFlashMessage('Please log in to access this page', 'warning');
-        redirect($redirect_url);
+        redirect(BASE_URL . $redirect_url);
     }
 }
 
@@ -64,7 +64,7 @@ function requireLogin($redirect_url = '/geez_restaurant/modules/auth/login.php')
  * @param string|array $required_roles Required role(s)
  * @param string $redirect_url URL to redirect to if not authorized
  */
-function requireRole($required_roles, $redirect_url = '/geez_restaurant/dashboard.php') {
+function requireRole($required_roles, $redirect_url = '/dashboard.php') {
     requireLogin();
     
     if (!is_array($required_roles)) {
@@ -73,7 +73,7 @@ function requireRole($required_roles, $redirect_url = '/geez_restaurant/dashboar
     
     if (!in_array($_SESSION['role'], $required_roles)) {
         setFlashMessage('You do not have permission to access this page', 'danger');
-        redirect($redirect_url);
+        redirect(BASE_URL . $redirect_url);
     }
 }
 

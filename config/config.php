@@ -21,7 +21,7 @@ define('MODULE_PATH', BASE_PATH . '/modules');
 define('ASSET_PATH', BASE_PATH . '/assets');
 
 // URL paths (Update for production)
-define('BASE_URL', 'http://admingeez.habeshawi.uk/geez_restaurant'); // Full URL including subfolder
+define('BASE_URL', 'http://admingeez.habeshawi.uk'); // Correct URL without subfolder
 define('ASSET_URL', BASE_URL . '/assets');
 
 // Session settings
