@@ -40,7 +40,11 @@ class User {
             return false;
         }
         
-        if (password_verify($password, $user['password'])) {
+        // Trim password and hash just before verification to avoid whitespace issues
+        $trimmed_password = trim($password);
+        $trimmed_hash = trim($user['password']);
+
+        if (password_verify($trimmed_password, $trimmed_hash)) {
             $this->user_id = $user['user_id'];
             $this->username = $user['username'];
             $this->full_name = $user['full_name'];
@@ -66,7 +70,7 @@ class User {
             return true;
         } else {
             // Incorrect password
-            error_log("[DEBUG] Authentication failed: Incorrect password for username: " . $username);
+            error_log("[DEBUG] Authentication failed: Incorrect password for username: " . $username . " (Password length: " . strlen($trimmed_password) . ", Hash length: " . strlen($trimmed_hash) . ")");
             $this->error_message = "[Debug] Incorrect password."; // Specific message for debugging
             return false;
         }
