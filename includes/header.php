@@ -38,6 +38,9 @@ $flash_message = getFlashMessage();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($page_title) ? $page_title . ' - ' . APP_NAME : APP_NAME; ?></title>
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo ASSET_URL; ?>/img/favicon_io/favicon-16x16.png">
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     
