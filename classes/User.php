@@ -162,6 +162,9 @@ class User {
         // Set default last_login to NULL
         $data['last_login'] = null;
         
+        // Set created_at timestamp
+        $data['created_at'] = date('Y-m-d H:i:s');
+        
         return $this->db->insert('users', $data);
     }
     
