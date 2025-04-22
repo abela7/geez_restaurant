@@ -20,8 +20,8 @@ define('CLASS_PATH', BASE_PATH . '/classes');
 define('MODULE_PATH', BASE_PATH . '/modules');
 define('ASSET_PATH', BASE_PATH . '/assets');
 
-// URL paths (adjust based on your local setup)
-define('BASE_URL', '/geez_restaurant');
+// URL paths (Update for production)
+define('BASE_URL', 'http://admingeez.habeshawi.uk/geez_restaurant'); // Full URL including subfolder
 define('ASSET_URL', BASE_URL . '/assets');
 
 // Session settings
@@ -33,4 +33,4 @@ define('APP_NAME', 'Geez Restaurant Management System');
 define('APP_VERSION', '1.0.0');
 
 // Date and time settings
-date_default_timezone_set('UTC'); // Change to your timezone
+date_default_timezone_set('Europe/London'); // Set default timezone
