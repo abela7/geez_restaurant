@@ -198,7 +198,13 @@ class User {
     public function update($user_id, $data) {
         // Hash password if provided
         if (isset($data['password']) && !empty($data['password'])) {
+            // --- Add temporary debug log ---
+            error_log("[DEBUG] User::update - Hashing password for user_id: {$user_id}. Received password: '" . $data['password'] . "'");
+            // -------------------------------
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        } else {
+            // If password is not provided or empty in the form, remove it from $data
+            unset($data['password']); 
         }
         
         return $this->db->update('users', $data, 'user_id = ?', [$user_id]);
