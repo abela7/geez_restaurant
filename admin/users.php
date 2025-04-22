@@ -61,9 +61,9 @@ if (isPostRequest()) {
                     'is_active' => $is_active
                 ];
                 
-                // Add password if provided
+                // Add password to $data ONLY if provided, let User class handle hashing
                 if (!empty($password)) {
-                    $data['password'] = password_hash($password, PASSWORD_DEFAULT);
+                    $data['password'] = $password; // Pass the raw password
                 }
                 
                 if ($action == 'add') {
