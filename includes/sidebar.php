@@ -112,5 +112,13 @@
             </a>
         </li>
         <?php endif; ?>
+        
+        <hr>
+        
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo BASE_URL; ?>/modules/auth/logout.php">
+                <i class="bi bi-box-arrow-right text-danger"></i> Logout
+            </a>
+        </li>
     </ul>
 </div>
