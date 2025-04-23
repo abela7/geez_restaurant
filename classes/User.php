@@ -35,8 +35,8 @@ class User {
         $user = $this->db->fetchRow($sql, [$username]);
         
         if (!$user) {
-            error_log("[DEBUG] Authentication failed: User not found or not active for username: " . $username);
-            $this->error_message = "[Debug] User not found or is inactive."; // Specific message for debugging
+            error_log("Authentication failed: User not found or not active for username: " . $username);
+            $this->error_message = "Invalid username or password."; // Generic error for security
             return false;
         }
         
@@ -70,14 +70,14 @@ class User {
             return true;
         } else {
             // Incorrect password
-            error_log("[DEBUG] Authentication failed: Incorrect password for username: " . $username . " (Password length: " . strlen($trimmed_password) . ", Hash length: " . strlen($trimmed_hash) . ")");
-            $this->error_message = "[Debug] Incorrect password."; // Specific message for debugging
+            error_log("Authentication failed: Incorrect password for username: " . $username);
+            $this->error_message = "Invalid username or password."; // Generic error for security
             return false;
         }
         
         // This part should theoretically not be reached, but added for completeness
-        error_log("[DEBUG] Authentication failed: Unknown reason for username: " . $username);
-        $this->error_message = "[Debug] An unexpected error occurred during login.";
+        error_log("Authentication failed: Unknown reason for username: " . $username);
+        $this->error_message = "An unexpected error occurred during login."; 
         return false;
     }
     
@@ -198,9 +198,6 @@ class User {
     public function update($user_id, $data) {
         // Hash password if provided
         if (isset($data['password']) && !empty($data['password'])) {
-            // --- Add temporary debug log ---
-            error_log("[DEBUG] User::update - Hashing password for user_id: {$user_id}. Received password: '" . $data['password'] . "'");
-            // -------------------------------
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
         } else {
             // If password is not provided or empty in the form, remove it from $data
