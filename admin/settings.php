@@ -50,8 +50,8 @@ try {
         foreach ($current_settings as $row) {
             // Ensure the key exists before assigning
             if (array_key_exists($row['setting_key'], $settings)) {
-                 $settings[$row['setting_key']] = $row['setting_value'];
-            }
+        $settings[$row['setting_key']] = $row['setting_value'];
+    }
         }
     }
 } catch (Exception $e) {
@@ -157,7 +157,7 @@ if (isPostRequest() && isset($_POST['action']) && $_POST['action'] == 'reset_app
             </div>
         </div>
     </div>
-</div>
+                </div>
 
 <div class="row">
     <!-- Application Reset Section -->
@@ -194,17 +194,17 @@ if (isPostRequest() && isset($_POST['action']) && $_POST['action'] == 'reset_app
                         <i class="bi bi-trash"></i> Reset All Application Data Now
                     </button>
                 </form>
-            </div>
-        </div>
-    </div>
-    
+                            </div>
+                        </div>
+                    </div>
+                    
     <!-- Add other settings sections here if needed -->
     <!--
     <div class="col-md-6 mb-4">
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title mb-0">Other Settings</h5>
-            </div>
+                    </div>
             <div class="card-body">
                 <p>Placeholder for future settings.</p>
             </div>
