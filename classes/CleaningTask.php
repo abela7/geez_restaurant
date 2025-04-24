@@ -101,6 +101,10 @@ class CleaningTask {
      * @return int|false New task ID or false on failure
      */
     public function create($data) {
+        // Set timestamps
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        
         return $this->db->insert('cleaning_task', $data);
     }
     
@@ -112,6 +116,9 @@ class CleaningTask {
      * @return int Number of affected rows
      */
     public function update($task_id, $data) {
+        // Set updated timestamp
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        
         return $this->db->update('cleaning_task', $data, 'task_id = ?', [$task_id]);
     }
     
