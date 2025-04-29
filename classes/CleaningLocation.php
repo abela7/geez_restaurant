@@ -89,4 +89,15 @@ class CleaningLocation {
         $data = ['is_active' => $is_active ? 1 : 0];
         return $this->db->update('cleaning_locations', $data, 'location_id = ?', [$location_id]);
     }
+    
+    /**
+     * Get location by name
+     * 
+     * @param string $name Location name
+     * @return array|false Location data or false if not found
+     */
+    public function getByName($name) {
+        $sql = "SELECT * FROM cleaning_locations WHERE name = ?";
+        return $this->db->fetchRow($sql, [$name]);
+    }
 }

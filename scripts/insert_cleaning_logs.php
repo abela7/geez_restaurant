@@ -35,12 +35,19 @@ $user = new User($db);
 // Set script parameters
 $start_date = '2023-08-12';
 $end_date = date('Y-m-d'); // Current date
-$location_ids = [5, 6, 8]; // Kitchen areas
-$time_range_start = '22:00:00';
-$time_range_end = '23:00:00';
+
+// Get Kitchen location ID - THIS IS THE IMPORTANT CHANGE
+$kitchen = $cleaning_location->getByName('Kitchen');
+if (!$kitchen) {
+    die("Error: Kitchen location not found! Please run reset_database.php first.\n");
+}
+$location_ids = [$kitchen['location_id']]; // Only use the Kitchen location
+
+$time_range_start = '08:00:00';  // More realistic time range for cleaning activities
+$time_range_end = '20:00:00';    // Cover a full day of operation
 
 echo "Script will create cleaning logs from $start_date to $end_date\n";
-echo "For locations: " . implode(", ", $location_ids) . "\n";
+echo "For location: Kitchen (ID: {$location_ids[0]})\n";
 echo "With times between $time_range_start and $time_range_end\n\n";
 
 // ========== CHECK LOCATIONS ==========
