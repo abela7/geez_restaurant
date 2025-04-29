@@ -158,6 +158,9 @@ class CleaningLog {
             $mappedData['completed_by_user_id'] = $data['completed_by_user_id'];
         }
         
+        // Add created_at timestamp
+        $mappedData['created_at'] = date('Y-m-d H:i:s');
+        
         return $this->db->insert('cleaning_log', $mappedData);
     }
     

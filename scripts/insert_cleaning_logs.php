@@ -301,11 +301,12 @@ while ($current_date <= $end_date_obj) {
                 $log_data = [
                     'task_id' => $task['task_id'],
                     'location_id' => $location_id,
-                    'cleaning_date' => $date,
-                    'cleaning_time' => $completion_time,
+                    'completed_date' => $date,
+                    'completed_time' => $completion_time,
                     'completed_by_user_id' => $staff_id,
-                    'is_completed' => 1,
-                    'notes' => null
+                    'is_verified' => 1,
+                    'notes' => null,
+                    'created_at' => date('Y-m-d H:i:s')
                 ];
                 
                 try {
