@@ -126,12 +126,17 @@ class TempCheck {
         
         if (isset($data['is_compliant'])) $newData['is_compliant'] = $data['is_compliant'];
         if (isset($data['corrective_action'])) $newData['corrective_action'] = $data['corrective_action'];
+        if (isset($data['stock_quantity_observed'])) $newData['stock_quantity'] = $data['stock_quantity_observed'];
+        if (isset($data['notes'])) $newData['notes'] = $data['notes'];
         
         if (isset($data['checked_by_user_id'])) {
             $newData['checked_by_user_id'] = $data['checked_by_user_id'];
         } elseif (isset($data['recorded_by_user_id'])) {
             $newData['checked_by_user_id'] = $data['recorded_by_user_id'];
         }
+
+        // Add created_at timestamp to fix the database error
+        $newData['created_at'] = date('Y-m-d H:i:s');
         
         return $newData;
     }
