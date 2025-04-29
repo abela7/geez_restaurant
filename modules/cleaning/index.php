@@ -86,7 +86,7 @@ $page_actions = '
                     <?php foreach ($all_locations as $loc): ?>
                     <a href="<?php echo BASE_URL; ?>/modules/cleaning/log.php?location_id=<?php echo $loc['location_id']; ?>" class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-1"><?php echo htmlspecialchars($loc['location']); ?></h6>
+                            <h6 class="mb-1"><?php echo htmlspecialchars($loc['location_name']); ?></h6>
                         </div>
                         <?php if (!empty($loc['establishment'])): ?>
                         <small class="text-muted">Establishment: <?php echo htmlspecialchars($loc['establishment']); ?></small>
