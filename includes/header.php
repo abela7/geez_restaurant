@@ -39,7 +39,11 @@ $flash_message = getFlashMessage();
     <title><?php echo isset($page_title) ? $page_title . ' - ' . APP_NAME : APP_NAME; ?></title>
     
     <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="<?php echo ASSET_URL; ?>/img/favicon_io/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo ASSET_URL; ?>/img/favicon_io/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo ASSET_URL; ?>/img/favicon_io/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo ASSET_URL; ?>/img/favicon_io/apple-touch-icon.png">
+    <link rel="manifest" href="<?php echo ASSET_URL; ?>/img/favicon_io/site.webmanifest">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">

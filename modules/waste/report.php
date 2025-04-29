@@ -177,7 +177,7 @@ $page_actions = '
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body text-center">
-                                <h3 class="display-4">$<?php echo number_format($total_cost, 2); ?></h3>
+                                <h3 class="display-4">£<?php echo number_format($total_cost, 2); ?></h3>
                                 <p class="text-muted">Total Waste Cost</p>
                             </div>
                         </div>
@@ -185,7 +185,7 @@ $page_actions = '
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body text-center">
-                                <h3 class="display-4">$<?php echo $total_incidents > 0 ? number_format($total_cost / $total_incidents, 2) : '0.00'; ?></h3>
+                                <h3 class="display-4">£<?php echo $total_incidents > 0 ? number_format($total_cost / $total_incidents, 2) : '0.00'; ?></h3>
                                 <p class="text-muted">Average Cost per Incident</p>
                             </div>
                         </div>
@@ -213,7 +213,7 @@ $page_actions = '
                                     <tr>
                                         <td><?php echo htmlspecialchars($reason); ?></td>
                                         <td><?php echo $data['count']; ?></td>
-                                        <td>$<?php echo number_format($data['cost'], 2); ?></td>
+                                        <td>£<?php echo number_format($data['cost'], 2); ?></td>
                                         <td><?php echo number_format(($data['cost'] / $total_cost) * 100, 1); ?>%</td>
                                     </tr>
                                     <?php endforeach; ?>
@@ -242,7 +242,7 @@ $page_actions = '
                                     <tr>
                                         <td><?php echo htmlspecialchars($item); ?></td>
                                         <td><?php echo $data['count']; ?></td>
-                                        <td>$<?php echo number_format($data['cost'], 2); ?></td>
+                                        <td>£<?php echo number_format($data['cost'], 2); ?></td>
                                         <td><?php echo number_format(($data['cost'] / $total_cost) * 100, 1); ?>%</td>
                                     </tr>
                                     <?php endforeach; ?>
@@ -272,7 +272,7 @@ $page_actions = '
                                     <tr>
                                         <td><?php echo formatDate($date, 'D, d M Y'); ?></td>
                                         <td><?php echo $data['count']; ?></td>
-                                        <td>$<?php echo number_format($data['cost'], 2); ?></td>
+                                        <td>£<?php echo number_format($data['cost'], 2); ?></td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -319,8 +319,8 @@ $page_actions = '
                             <tr>
                                 <td><?php echo formatDate($date, 'D, d M Y'); ?></td>
                                 <td><?php echo $data['count']; ?></td>
-                                <td>$<?php echo number_format($data['cost'], 2); ?></td>
-                                <td>$<?php echo number_format($data['cost'] / $data['count'], 2); ?></td>
+                                <td>£<?php echo number_format($data['cost'], 2); ?></td>
+                                <td>£<?php echo number_format($data['cost'] / $data['count'], 2); ?></td>
                                 <td>
                                     <a href="<?php echo BASE_URL; ?>/modules/waste/view.php?start_date=<?php echo $date; ?>&end_date=<?php echo $date; ?>" class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-eye"></i> View Details
@@ -376,7 +376,7 @@ $page_actions = '
                                 <td><?php echo htmlspecialchars($item); ?></td>
                                 <td><?php echo $data['count']; ?></td>
                                 <td><?php echo number_format($data['quantity'], 2); ?></td>
-                                <td>$<?php echo number_format($data['cost'], 2); ?></td>
+                                <td>£<?php echo number_format($data['cost'], 2); ?></td>
                                 <td><?php echo number_format(($data['cost'] / $total_all_cost) * 100, 1); ?>%</td>
                             </tr>
                             <?php endforeach; ?>
@@ -427,8 +427,8 @@ $page_actions = '
                             <tr>
                                 <td><?php echo htmlspecialchars($reason); ?></td>
                                 <td><?php echo $data['count']; ?></td>
-                                <td>$<?php echo number_format($data['cost'], 2); ?></td>
-                                <td>$<?php echo number_format($data['cost'] / $data['count'], 2); ?></td>
+                                <td>£<?php echo number_format($data['cost'], 2); ?></td>
+                                <td>£<?php echo number_format($data['cost'] / $data['count'], 2); ?></td>
                                 <td><?php echo number_format(($data['cost'] / $total_all_cost) * 100, 1); ?>%</td>
                             </tr>
                             <?php endforeach; ?>
@@ -458,8 +458,8 @@ $page_actions = '
                                 <td><?php echo formatDateTime($log['waste_timestamp'], 'd M Y H:i'); ?></td>
                                 <td><?php echo htmlspecialchars($log['item_description']); ?></td>
                                 <td><?php echo htmlspecialchars($log['quantity'] . ' ' . $log['unit_of_measure']); ?></td>
-                                <td>$<?php echo number_format($log['cost_per_unit'], 2); ?></td>
-                                <td>$<?php echo number_format($log['total_cost'], 2); ?></td>
+                                <td>£<?php echo number_format($log['cost_per_unit'], 2); ?></td>
+                                <td>£<?php echo number_format($log['total_cost'], 2); ?></td>
                                 <td><?php echo htmlspecialchars($log['reason_for_waste']); ?></td>
                                 <td><?php echo htmlspecialchars($log['facility_location'] ?? 'N/A'); ?></td>
                                 <td><?php echo htmlspecialchars($log['recorded_by']); ?></td>

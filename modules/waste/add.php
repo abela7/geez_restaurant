@@ -142,7 +142,7 @@ if (isPostRequest()) {
                     </div>
                     
                     <div class="mb-3">
-                        <label for="cost_per_unit" class="form-label">Cost Per Unit ($)</label>
+                        <label for="cost_per_unit" class="form-label">Cost Per Unit (£)</label>
                         <input type="number" class="form-control" id="cost_per_unit" name="cost_per_unit" step="0.01" min="0" placeholder="e.g., 4.99">
                         <div class="form-text">Enter the cost per unit to calculate total waste value.</div>
                     </div>

@@ -110,7 +110,7 @@ $page_actions = '
                     </div>
                     <div class="col-6">
                         <div class="p-3 text-center">
-                            <h5>$<?php echo number_format($today_cost, 2); ?></h5>
+                            <h5>£<?php echo number_format($today_cost, 2); ?></h5>
                             <p class="text-muted mb-0">Today's Cost</p>
                         </div>
                     </div>
@@ -125,7 +125,7 @@ $page_actions = '
                     </div>
                     <div class="col-6">
                         <div class="p-3 text-center">
-                            <h5>$<?php echo number_format($week_cost, 2); ?></h5>
+                            <h5>£<?php echo number_format($week_cost, 2); ?></h5>
                             <p class="text-muted mb-0">Weekly Cost</p>
                         </div>
                     </div>
@@ -140,7 +140,7 @@ $page_actions = '
                     </div>
                     <div class="col-6">
                         <div class="p-3 text-center">
-                            <h5>$<?php echo number_format($month_cost, 2); ?></h5>
+                            <h5>£<?php echo number_format($month_cost, 2); ?></h5>
                             <p class="text-muted mb-0">Monthly Cost</p>
                         </div>
                     </div>
@@ -182,7 +182,7 @@ $page_actions = '
                                 <td><?php echo formatDateTime($log['waste_timestamp'], 'd M Y H:i'); ?></td>
                                 <td><?php echo htmlspecialchars($log['item_description']); ?></td>
                                 <td><?php echo htmlspecialchars($log['quantity'] . ' ' . $log['unit_of_measure']); ?></td>
-                                <td>$<?php echo number_format($log['total_cost'], 2); ?></td>
+                                <td>£<?php echo number_format($log['total_cost'], 2); ?></td>
                                 <td><?php echo htmlspecialchars($log['reason_for_waste']); ?></td>
                                 <td>
                                     <a href="<?php echo BASE_URL; ?>/modules/waste/view.php?id=<?php echo $log['waste_id']; ?>" class="btn btn-sm btn-outline-primary">

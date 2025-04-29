@@ -210,11 +210,11 @@ if ($waste_id) {
             </tr>
             <tr>
                 <th>Cost Per Unit:</th>
-                <td>$<?php echo number_format($waste_details['cost_per_unit'], 2); ?></td>
+                <td>£<?php echo number_format($waste_details['cost_per_unit'], 2); ?></td>
             </tr>
             <tr>
                 <th>Total Cost:</th>
-                <td>$<?php echo number_format($waste_details['total_cost'], 2); ?></td>
+                <td>£<?php echo number_format($waste_details['total_cost'], 2); ?></td>
             </tr>
             <tr>
                 <th>Reason for Waste:</th>
@@ -306,12 +306,12 @@ if ($waste_id) {
             </div>
             <div class="summary-box" style="width: 30%;">
                 <div class="summary-title">Total Cost</div>
-                <div class="summary-value">$<?php echo number_format($total_cost, 2); ?></div>
+                <div class="summary-value">£<?php echo number_format($total_cost, 2); ?></div>
                 <div class="summary-label">Value of wasted items</div>
             </div>
             <div class="summary-box" style="width: 30%;">
                 <div class="summary-title">Average Cost</div>
-                <div class="summary-value">$<?php echo $total_incidents > 0 ? number_format($total_cost / $total_incidents, 2) : '0.00'; ?></div>
+                <div class="summary-value">£<?php echo $total_incidents > 0 ? number_format($total_cost / $total_incidents, 2) : '0.00'; ?></div>
                 <div class="summary-label">Per incident</div>
             </div>
         </div>
@@ -334,7 +334,7 @@ if ($waste_id) {
                 <tr>
                     <td><?php echo htmlspecialchars($reason); ?></td>
                     <td><?php echo $data['count']; ?></td>
-                    <td>$<?php echo number_format($data['cost'], 2); ?></td>
+                    <td>£<?php echo number_format($data['cost'], 2); ?></td>
                     <td><?php echo number_format(($data['cost'] / $total_cost) * 100, 1); ?>%</td>
                 </tr>
                 <?php endforeach; ?>
@@ -359,7 +359,7 @@ if ($waste_id) {
                 <tr>
                     <td><?php echo htmlspecialchars($item); ?></td>
                     <td><?php echo $data['count']; ?></td>
-                    <td>$<?php echo number_format($data['cost'], 2); ?></td>
+                    <td>£<?php echo number_format($data['cost'], 2); ?></td>
                     <td><?php echo number_format(($data['cost'] / $total_cost) * 100, 1); ?>%</td>
                 </tr>
                 <?php endforeach; ?>
@@ -383,7 +383,7 @@ if ($waste_id) {
                 <tr>
                     <td><?php echo formatDate($date, 'D, d M Y'); ?></td>
                     <td><?php echo $data['count']; ?></td>
-                    <td>$<?php echo number_format($data['cost'], 2); ?></td>
+                    <td>£<?php echo number_format($data['cost'], 2); ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -425,8 +425,8 @@ if ($waste_id) {
                 <tr>
                     <td><?php echo formatDate($date, 'D, d M Y'); ?></td>
                     <td><?php echo $data['count']; ?></td>
-                    <td>$<?php echo number_format($data['cost'], 2); ?></td>
-                    <td>$<?php echo number_format($data['cost'] / $data['count'], 2); ?></td>
+                    <td>£<?php echo number_format($data['cost'], 2); ?></td>
+                    <td>£<?php echo number_format($data['cost'] / $data['count'], 2); ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -475,7 +475,7 @@ if ($waste_id) {
                     <td><?php echo htmlspecialchars($item); ?></td>
                     <td><?php echo $data['count']; ?></td>
                     <td><?php echo number_format($data['quantity'], 2); ?></td>
-                    <td>$<?php echo number_format($data['cost'], 2); ?></td>
+                    <td>£<?php echo number_format($data['cost'], 2); ?></td>
                     <td><?php echo number_format(($data['cost'] / $total_all_cost) * 100, 1); ?>%</td>
                 </tr>
                 <?php endforeach; ?>
@@ -524,8 +524,8 @@ if ($waste_id) {
                 <tr>
                     <td><?php echo htmlspecialchars($reason); ?></td>
                     <td><?php echo $data['count']; ?></td>
-                    <td>$<?php echo number_format($data['cost'], 2); ?></td>
-                    <td>$<?php echo number_format($data['cost'] / $data['count'], 2); ?></td>
+                    <td>£<?php echo number_format($data['cost'], 2); ?></td>
+                    <td>£<?php echo number_format($data['cost'] / $data['count'], 2); ?></td>
                     <td><?php echo number_format(($data['cost'] / $total_all_cost) * 100, 1); ?>%</td>
                 </tr>
                 <?php endforeach; ?>
@@ -553,8 +553,8 @@ if ($waste_id) {
                     <td><?php echo formatDateTime($log['waste_timestamp'], 'd M Y H:i'); ?></td>
                     <td><?php echo htmlspecialchars($log['item_description']); ?></td>
                     <td><?php echo htmlspecialchars($log['quantity'] . ' ' . $log['unit_of_measure']); ?></td>
-                    <td>$<?php echo number_format($log['cost_per_unit'], 2); ?></td>
-                    <td>$<?php echo number_format($log['total_cost'], 2); ?></td>
+                    <td>£<?php echo number_format($log['cost_per_unit'], 2); ?></td>
+                    <td>£<?php echo number_format($log['total_cost'], 2); ?></td>
                     <td><?php echo htmlspecialchars($log['reason_for_waste']); ?></td>
                     <td><?php echo htmlspecialchars($log['facility_location'] ?? 'N/A'); ?></td>
                     <td><?php echo htmlspecialchars($log['recorded_by']); ?></td>

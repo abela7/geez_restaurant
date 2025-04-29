@@ -223,7 +223,7 @@ function hasRole($roles) {
  * @param string $symbol Currency symbol
  * @return string Formatted currency
  */
-function formatCurrency($amount, $symbol = '$') {
+function formatCurrency($amount, $symbol = '£') {
     if (empty($amount)) return $symbol . '0.00';
     return $symbol . number_format((float)$amount, 2);
 }

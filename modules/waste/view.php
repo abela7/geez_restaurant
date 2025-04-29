@@ -66,11 +66,11 @@ $page_actions = '
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-4 fw-bold">Cost Per Unit:</div>
-                    <div class="col-md-8">$<?php echo number_format($waste_details['cost_per_unit'], 2); ?></div>
+                    <div class="col-md-8">£<?php echo number_format($waste_details['cost_per_unit'], 2); ?></div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-4 fw-bold">Total Cost:</div>
-                    <div class="col-md-8">$<?php echo number_format($waste_details['total_cost'], 2); ?></div>
+                    <div class="col-md-8">£<?php echo number_format($waste_details['total_cost'], 2); ?></div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-4 fw-bold">Reason for Waste:</div>
@@ -166,7 +166,7 @@ $page_actions = '
                                 <td><?php echo formatDateTime($log['waste_timestamp'], 'd M Y H:i'); ?></td>
                                 <td><?php echo htmlspecialchars($log['item_description']); ?></td>
                                 <td><?php echo htmlspecialchars($log['quantity'] . ' ' . $log['unit_of_measure']); ?></td>
-                                <td>$<?php echo number_format($log['total_cost'], 2); ?></td>
+                                <td>£<?php echo number_format($log['total_cost'], 2); ?></td>
                                 <td><?php echo htmlspecialchars($log['reason_for_waste']); ?></td>
                                 <td>
                                     <a href="<?php echo BASE_URL; ?>/modules/waste/view.php?id=<?php echo $log['waste_id']; ?>" class="btn btn-sm btn-outline-primary">
@@ -195,8 +195,8 @@ $page_actions = '
                                 }
                                 ?>
                                 <p><strong>Total Incidents:</strong> <?php echo $total_incidents; ?></p>
-                                <p><strong>Total Cost:</strong> $<?php echo number_format($total_cost, 2); ?></p>
-                                <p><strong>Average Cost per Incident:</strong> $<?php echo $total_incidents > 0 ? number_format($total_cost / $total_incidents, 2) : '0.00'; ?></p>
+                                <p><strong>Total Cost:</strong> £<?php echo number_format($total_cost, 2); ?></p>
+                                <p><strong>Average Cost per Incident:</strong> £<?php echo $total_incidents > 0 ? number_format($total_cost / $total_incidents, 2) : '0.00'; ?></p>
                             </div>
                         </div>
                     </div>
