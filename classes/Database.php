@@ -69,6 +69,18 @@ class Database {
     }
     
     /**
+     * Fetch a single record from the database as an associative array
+     * 
+     * @param string $sql SQL query with placeholders
+     * @param array $params Parameters to bind to the query
+     * @return array|false The fetched record or false if no record found
+     */
+    public function fetchOne($sql, $params = []) {
+        $stmt = $this->query($sql, $params);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    /**
      * Insert a record into the database
      * 
      * @param string $table Table name

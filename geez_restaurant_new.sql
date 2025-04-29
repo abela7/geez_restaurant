@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 22, 2025 at 09:47 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost
+-- Generation Time: Apr 29, 2025 at 07:50 PM
+-- Server version: 10.11.11-MariaDB-ubu2204
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `geez_restaurant`
+-- Database: `admi_geez_db`
 --
 
 -- --------------------------------------------------------
@@ -35,6 +35,13 @@ CREATE TABLE `cleaning_locations` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cleaning_locations`
+--
+
+INSERT INTO `cleaning_locations` (`location_id`, `name`, `description`, `is_active`, `created_at`, `updated_at`) VALUES
+(12, 'Kitchen', 'Establishment: Restaurant, Building: Geez, Kitchen Number: 1', 1, '2025-04-23 01:21:54', '2025-04-23 01:21:54');
 
 -- --------------------------------------------------------
 
@@ -74,6 +81,48 @@ CREATE TABLE `cleaning_task` (
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `cleaning_task`
+--
+
+INSERT INTO `cleaning_task` (`task_id`, `location_id`, `description`, `frequency`, `instructions`, `is_active`, `created_at`, `updated_at`) VALUES
+(18, 12, 'Wash Dirty Dishes, Utensils, Glassware, Pots and Pans', 'Daily', '', 1, '2025-04-25 23:41:16', '2025-04-25 23:41:16'),
+(19, 12, 'Thoroughly Clean and Disinfect The Sinks and Taps', 'Daily', '', 1, '2025-04-25 23:42:10', '2025-04-25 23:42:10'),
+(20, 12, 'Wash and Sanitize All Counter Tops And Prep Area Surfaces', 'Daily', '', 1, '2025-04-25 23:42:54', '2025-04-25 23:42:54'),
+(21, 12, 'Disinfect Touch Points, Light Switches and Handles', 'Daily', '', 1, '2025-04-25 23:43:54', '2025-04-25 23:43:54'),
+(22, 12, 'Clean Exterior of Appliances. Check For Spiller Food', 'Daily', '', 1, '2025-04-25 23:45:01', '2025-04-25 23:45:01'),
+(23, 12, 'Replace Rags/Cloths and Tea Towels With Clean Ones', 'Daily', '', 1, '2025-04-25 23:46:06', '2025-04-25 23:46:06'),
+(24, 12, 'Take out The Rubbish/Trash, Remote Waste and Recycle', 'Daily', '', 1, '2025-04-25 23:46:52', '2025-04-25 23:46:52'),
+(25, 12, 'Clean And Disinfect Bins Waste Disposal areas And Trash Cans', 'Daily', '', 1, '2025-04-25 23:47:34', '2025-04-26 00:00:00'),
+(26, 12, 'Sweep And Mop Tiled And laminate Floor', 'Daily', '', 1, '2025-04-25 23:48:05', '2025-04-25 23:48:05'),
+(27, 12, 'Clean cooker', 'Daily', '', 1, '2025-04-25 23:48:47', '2025-04-25 23:48:47'),
+(28, 12, 'Clean Microwave, Including the exterior', 'Daily', '', 1, '2025-04-25 23:49:19', '2025-04-25 23:49:19'),
+(29, 12, 'Wipe Down The Wall Wherever there are Spills and Splashes', 'Daily', '', 1, '2025-04-25 23:49:54', '2025-04-25 23:49:54'),
+(30, 12, 'Replace Empty Paper Towel Rolls and Cloths Roller Towels', 'Daily', '', 1, '2025-04-25 23:51:27', '2025-04-25 23:51:27'),
+(31, 12, 'Refill Soap Dispensers and Hand Sanitizerz', 'Daily', '', 1, '2025-04-25 23:52:36', '2025-04-25 23:52:36'),
+(32, 12, 'Clean Cabinets and Pantries', 'Daily', '', 1, '2025-04-25 23:53:34', '2025-04-25 23:53:34'),
+(33, 12, 'Sanitize Sponges or Replace Damaged ones with New', 'Daily', '', 1, '2025-04-25 23:54:26', '2025-04-25 23:54:26'),
+(34, 12, 'Sort Through Leftover Items in The Fridge/Refrigerator', 'Daily', '', 1, '2025-04-25 23:55:24', '2025-04-25 23:55:24'),
+(35, 12, 'Clean out Refrigerator And Wipe Down Shelves And Drawers', 'Daily', '', 1, '2025-04-25 23:56:11', '2025-04-25 23:56:11'),
+(36, 12, 'Check Fire Exit Lights And Emergency Lights', 'Daily', '', 1, '2025-04-25 23:57:05', '2025-04-25 23:57:05'),
+(37, 12, 'Replace And Change Burned Out Light Bulbs/Broken Lights', 'Daily', '', 1, '2025-04-25 23:57:55', '2025-04-25 23:57:55'),
+(38, 12, 'Wash And Clean Doors, Door Frames And Glass', 'Daily', '', 1, '2025-04-26 00:00:51', '2025-04-26 00:00:51'),
+(39, 12, 'Pour Drain Cleaner Down Floor And Sink Drains', 'Daily', '', 1, '2025-04-26 00:01:35', '2025-04-26 00:01:35'),
+(40, 12, 'Check Cleaning Supplies And Restoke As Necessary', 'Daily', '', 1, '2025-04-26 00:02:11', '2025-04-26 00:02:11'),
+(41, 12, 'Sanitize The Tables', 'Daily', '', 1, '2025-04-26 00:02:27', '2025-04-26 00:02:27'),
+(42, 12, 'Thoroughly Clean Grouts And Tiles', 'Monthly', '', 1, '2025-04-26 00:07:27', '2025-04-26 00:07:47'),
+(43, 12, 'Clean Skirting Boards/Baseboards And Corners', 'Monthly', '', 1, '2025-04-26 00:09:25', '2025-04-26 00:09:25'),
+(46, 12, 'Clean Under Refrigerator', 'Monthly', '', 1, '2025-04-26 00:12:24', '2025-04-26 00:12:24'),
+(47, 12, 'Inventory. Check What is Outdated and What Needs To Be Restoked', 'Monthly', '', 1, '2025-04-26 00:13:25', '2025-04-26 00:21:45'),
+(48, 12, 'Wash And Clean Windows', 'Weekly', '', 1, '2025-04-26 00:14:06', '2025-04-26 14:32:01'),
+(49, 12, 'Check Hardware. Door Stops, And Lock Mechanisms', 'Monthly', '', 1, '2025-04-26 00:15:05', '2025-04-26 00:15:05'),
+(50, 12, 'Dust and Clean Ceilings, Ceiling Corners and Ceiling Tiels', 'Monthly', '', 1, '2025-04-26 00:16:32', '2025-04-26 00:16:32'),
+(51, 12, 'Check For Freezer Items That needs Removing or Restoke', 'Monthly', '', 1, '2025-04-26 00:18:29', '2025-04-26 00:18:29'),
+(52, 12, 'Check For Outdated Food in Cabinets and Pantries', 'Monthly', '', 1, '2025-04-26 00:19:09', '2025-04-26 00:19:09'),
+(53, 12, 'Disinfect and Clean All The Walls from Top To Bottom', 'Monthly', '', 1, '2025-04-26 00:19:37', '2025-04-26 00:19:37'),
+(54, 12, 'Empty Grease Trap', 'Monthly', '', 1, '2025-04-26 00:20:04', '2025-04-26 00:20:04'),
+(63, 12, 'Clean Refrigerator Coils to Remove Dust. Unplug First.', 'Monthly', '', 1, '2025-04-26 00:27:02', '2025-04-26 00:27:02');
+
 -- --------------------------------------------------------
 
 --
@@ -94,6 +143,14 @@ CREATE TABLE `equipment` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `equipment`
+--
+
+INSERT INTO `equipment` (`equipment_id`, `name`, `location`, `content`, `quantity_in_stock`, `min_stock_quantity`, `min_temp`, `max_temp`, `check_frequency`, `is_active`, `created_at`, `updated_at`) VALUES
+(10, 'Kitchen Main Fridge', 'Kitchen', 'Dairy Products, Vegetables and Fresh meat', NULL, NULL, 18.0, 25.0, 'Daily', 1, '2025-04-23 21:26:43', '2025-04-29 20:15:38'),
+(11, 'Frozen Fridge', 'Store Room', 'Frozen Vegetables', NULL, NULL, -18.0, -22.0, 'Daily', 1, '2025-04-23 21:27:58', '2025-04-29 20:18:06');
 
 -- --------------------------------------------------------
 
@@ -196,6 +253,14 @@ CREATE TABLE `temperature_checks` (
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `temperature_checks`
+--
+
+INSERT INTO `temperature_checks` (`check_id`, `equipment_id`, `temperature`, `is_compliant`, `corrective_action`, `check_date`, `check_time`, `checked_by_user_id`, `created_at`, `updated_at`) VALUES
+(1, 10, 21.0, 1, '', '2023-08-12', '10:34:00', 1, '2025-04-29 20:09:35', NULL),
+(2, 10, 20.5, 1, '', '2023-08-13', '10:41:00', 1, '2025-04-29 20:42:54', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -221,12 +286,13 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `full_name`, `email`, `initials`, `role`, `is_active`, `last_login`, `created_at`, `updated_at`) VALUES
-(1, 'admin', '$2y$10$2W/ck3zFb1F1Yu.44nxnwOlYiTVl4JubyQPAQIoS2NSgDKF8dywym', 'Abel Demssie', NULL, 'Ab', 'admin', 1, '2025-04-15 23:40:37', '2025-04-09 02:58:10', NULL),
-(4, 'Michael', '$2y$10$jDjUQsrJQPSAH2WoferrmufqrYXkdaq6kHGdEy7im.ZOb6FfAxOCy', 'Michael Werkneh', NULL, 'RM', 'admin', 1, NULL, '2025-04-09 03:00:30', NULL),
+(1, 'Abela', '$2y$10$Mxcs13DOiogxhkKYHp7F1eJmjqs5tO0lM7fVwy1lw/egR9Rz4RrjC', 'Abel Demssie', NULL, 'Ab', 'admin', 1, '2025-04-29 18:32:06', '2025-04-09 02:58:10', NULL),
+(4, 'Michael', '$2y$10$mbcn1dHgi2/WZSEvVoxho.CyD6tZPIV0nYxGUBRIQsl1ddd7NdCSG', 'Michael Werkneh', NULL, 'RM', 'admin', 1, '2025-04-25 23:38:12', '2025-04-09 03:00:30', NULL),
 (5, 'Ruth', '$2y$10$r2XhskKlz0kcWJFpMSQS/uouFKhC9.qlwodlnNtPF/JGZGI1IZgUK', 'Ruth Alemu', NULL, 'HC', 'staff', 1, NULL, '2025-04-09 03:00:30', NULL),
-(6, 'Mahlet', '$2y$10$.cQJe3OkedhEwv/SBQ8NB.MLuOUjZqoxh2OW9gWPIDhcIekZ9FtKW', 'Mahlet Zerfu', NULL, 'KS', 'staff', 1, NULL, '2025-04-09 03:00:30', NULL),
-(7, 'Yonas', '$2y$10$H31N0s2wkPuJkiRBr3pqNesDjK7BoeEMk2UYG2LDp6Bz2viMmksBm', 'Kibrom Zenebe', NULL, 'SS', 'staff', 0, NULL, '2025-04-09 03:00:30', NULL),
-(8, 'sara', '$2y$10$jEfGGOqO37M10Mnbfr8KmO.YHK/Fi2qc7/tYF4kcmoBAMpYI6TjJO', 'Sara Teshome', NULL, NULL, 'manager', 1, NULL, '0000-00-00 00:00:00', NULL);
+(6, 'Mahlet', '$2y$10$r1v0LMTqXBe.5NhkKpiAYuJZxD40O8BUTw194e0krxTX1VREb07lW', 'Mahlet Zerfu', NULL, 'KS', 'staff', 1, '2025-04-23 01:24:12', '2025-04-09 03:00:30', NULL),
+(7, 'Yonas', '$2y$10$BvRA8qOmAeTKMmIefM1afOerGVkjKB4r/m52vIgBH6h0npM07rhQK', 'Kibrom Zenebe', NULL, 'SS', 'staff', 1, NULL, '2025-04-09 03:00:30', NULL),
+(8, 'sara', '$2y$10$jEfGGOqO37M10Mnbfr8KmO.YHK/Fi2qc7/tYF4kcmoBAMpYI6TjJO', 'Sara Teshome', NULL, NULL, 'manager', 1, NULL, '0000-00-00 00:00:00', NULL),
+(11, 'Tsion', '$2y$10$dx6XNVwJp1wcdpwH2LI14OGW4MaOcmp3NJypym11edV3yvnvE3q.e', 'Tsion Alemayehu', NULL, NULL, 'staff', 1, NULL, '2025-04-25 00:39:20', NULL);
 
 --
 -- Indexes for dumped tables
@@ -305,7 +371,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cleaning_locations`
 --
 ALTER TABLE `cleaning_locations`
-  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `cleaning_log`
@@ -317,13 +383,13 @@ ALTER TABLE `cleaning_log`
 -- AUTO_INCREMENT for table `cleaning_task`
 --
 ALTER TABLE `cleaning_task`
-  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `equipment`
 --
 ALTER TABLE `equipment`
-  MODIFY `equipment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `equipment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `food_waste_log`
@@ -347,13 +413,13 @@ ALTER TABLE `system_settings`
 -- AUTO_INCREMENT for table `temperature_checks`
 --
 ALTER TABLE `temperature_checks`
-  MODIFY `check_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `check_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
