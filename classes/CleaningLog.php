@@ -23,7 +23,7 @@ class CleaningLog {
      * @return array|false Log data or false if not found
      */
     public function getById($log_id) {
-        $sql = "SELECT cl.*, ct.description as task_description, ct.frequency, clo.name as location_name, u.full_name as recorded_by 
+        $sql = "SELECT cl.*, ct.description as task_description, ct.frequency, clo.name as name, u.full_name as recorded_by 
                 FROM cleaning_log cl 
                 JOIN cleaning_task ct ON cl.task_id = ct.task_id 
                 JOIN cleaning_locations clo ON cl.location_id = clo.location_id 
@@ -94,7 +94,7 @@ class CleaningLog {
         
         $where_clause = !empty($where) ? "WHERE " . implode(" AND ", $where) : "";
         
-        $sql = "SELECT cl.*, ct.description as task_description, clo.name as location_name, u.full_name as recorded_by 
+        $sql = "SELECT cl.*, ct.description as task_description, clo.name as name, u.full_name as recorded_by 
                 FROM cleaning_log cl 
                 JOIN cleaning_task ct ON cl.task_id = ct.task_id 
                 JOIN cleaning_locations clo ON cl.location_id = clo.location_id 

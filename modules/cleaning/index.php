@@ -86,7 +86,7 @@ $page_actions = '
                     <?php foreach ($all_locations as $loc): ?>
                     <a href="<?php echo BASE_URL; ?>/modules/cleaning/log.php?location_id=<?php echo $loc['location_id']; ?>" class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-1"><?php echo htmlspecialchars($loc['location_name']); ?></h6>
+                            <h6 class="mb-1"><?php echo htmlspecialchars($loc['name']); ?></h6>
                         </div>
                         <?php if (!empty($loc['establishment'])): ?>
                         <small class="text-muted">Establishment: <?php echo htmlspecialchars($loc['establishment']); ?></small>
@@ -135,7 +135,7 @@ $page_actions = '
                             <?php foreach ($recent_logs as $log): ?>
                             <tr>
                                 <td><?php echo formatDate($log['completed_date'], 'd M Y'); ?></td>
-                                <td><?php echo htmlspecialchars($log['location_name']); ?></td>
+                                <td><?php echo htmlspecialchars($log['name']); ?></td>
                                 <td><?php echo htmlspecialchars($log['task_description']); ?></td>
                                 <td>
                                     <span class="badge bg-<?php echo $log['is_completed'] ? 'success' : 'danger'; ?>">
