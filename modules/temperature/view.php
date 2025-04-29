@@ -47,6 +47,14 @@ $page_actions = '
 <a href="' . BASE_URL . '/modules/temperature/add.php" class="btn btn-primary">
     <i class="bi bi-plus-circle"></i> Add Temperature Check
 </a>';
+
+// Add access to the fix compliance utility for admins and managers
+if (hasRole(['admin', 'manager'])) {
+    $page_actions .= '
+    <a href="' . BASE_URL . '/modules/temperature/fix_compliance.php" class="btn btn-outline-secondary ms-2">
+        <i class="bi bi-wrench"></i> Fix Compliance Status
+    </a>';
+}
 ?>
 
 <?php if ($check_details): ?>

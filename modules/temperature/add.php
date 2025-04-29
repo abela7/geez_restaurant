@@ -57,13 +57,18 @@ if (isPostRequest()) {
                 
                 // Check if temperature is within acceptable range
                 if (is_numeric($temperature_reading)) {
-                    $is_compliant = ($temperature_reading >= $min_temp && $temperature_reading <= $max_temp) ? 1 : 0;
+                    // Fix: Ensure we're comparing numeric values
+                    $temp_value = floatval($temperature_reading);
+                    $min_value = floatval($min_temp);
+                    $max_value = floatval($max_temp);
+                    
+                    $is_compliant = ($temp_value >= $min_value && $temp_value <= $max_value) ? 1 : 0;
                     
                     // If not compliant, suggest corrective action
                     if (!$is_compliant) {
-                        if ($temperature_reading < $min_temp) {
+                        if ($temp_value < $min_value) {
                             $corrective_action = 'Temperature too low. Check equipment settings and functioning.';
-                        } else if ($temperature_reading > $max_temp) {
+                        } else if ($temp_value > $max_value) {
                             $corrective_action = 'Temperature too high. Check equipment settings and functioning.';
                         }
                     }
