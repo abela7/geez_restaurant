@@ -54,6 +54,8 @@ $all_equipment = $equipment_model->getAllActive();
 // --- Data Fetching ---
 $equipment_details_list = [];
 $temperature_checks_by_equipment = [];
+$all_dates = [];
+$consolidated_checks = [];
 
 if (!empty($equipment_ids)) {
     // Calculate start and end dates for the selected month
@@ -65,9 +67,22 @@ if (!empty($equipment_ids)) {
         if ($equipment_details) {
             $equipment_details_list[$equipment_id] = $equipment_details;
             // Use the getAll method with date range and equipment ID
-            $temperature_checks_by_equipment[$equipment_id] = $temp_check_model->getAll($start_date, $end_date, $equipment_id);
+            $temperature_checks = $temp_check_model->getAll($start_date, $end_date, $equipment_id);
+            $temperature_checks_by_equipment[$equipment_id] = $temperature_checks;
+            
+            // Collect all dates and organize checks by date
+            foreach ($temperature_checks as $check) {
+                $check_date = $check['check_date'] ?? '';
+                if (!empty($check_date)) {
+                    $all_dates[$check_date] = true;
+                    $consolidated_checks[$check_date][$equipment_id] = $check;
+                }
+            }
         }
     }
+    
+    // Sort dates in descending order
+    krsort($all_dates);
 }
 
 // Set page title dynamically
@@ -104,6 +119,7 @@ if (!empty($equipment_details_list)) {
             /* Optimize margins for printing */
             @page { 
                 margin: 0.3in; /* Reduced margins */
+                size: landscape;
             }
             .printable-header {
                 background-color: #f8f9fa !important; /* Light background for header */
@@ -154,14 +170,17 @@ if (!empty($equipment_details_list)) {
             a[href]:after { /* Don't show URLs when printing */
               content: none !important;
             }
-            .equipment-section {
-                page-break-before: always;
-            }
-            .equipment-section:first-child {
-                page-break-before: auto;
-            }
             .no-print {
                 display: none !important;
+            }
+            .equipment-header {
+                text-align: center !important;
+                font-weight: bold !important;
+                background-color: #e9ecef !important;
+            }
+            .verification-section {
+                margin-top: 20px;
+                page-break-inside: avoid;
             }
         }
         /* Center text in main table body cells for screen */
@@ -189,6 +208,11 @@ if (!empty($equipment_details_list)) {
         /* Show when print button clicked */
         .log-display.show {
             display: block;
+        }
+        .equipment-header {
+            text-align: center;
+            font-weight: bold;
+            background-color: #e9ecef;
         }
     </style>
 </head>
@@ -230,98 +254,117 @@ if (!empty($equipment_details_list)) {
     <?php else: // Equipment selected and found ?>
         
         <div id="logDisplay" class="log-display <?php echo $show_log ? 'show' : ''; ?>">
-        <?php foreach ($equipment_details_list as $equipment_id => $equipment_details): ?>
-            <div class="equipment-section">
-                <div class="printable-header mb-3">
-                    <h3 class="text-center mb-2">Temperature Monitoring Log</h3>
-                    <table class="header-details-table w-100">
-                        <tbody>
-                            <tr>
-                                <td><strong>Month:</strong> <?php echo $month_name . ' ' . $year; ?></td>
-                                <td><strong>Content:</strong> <?php echo htmlspecialchars($equipment_details['content'] ?? 'N/A'); ?></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Location:</strong> <?php echo htmlspecialchars($equipment_details['location'] ?? 'N/A'); ?></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Equipment:</strong> <?php echo htmlspecialchars($equipment_details['name']); ?></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>Temp Range:</strong>
-                                    <?php 
-                                        $min = $equipment_details['min_temp'] ?? null;
-                                        $max = $equipment_details['max_temp'] ?? null;
-                                        if ($min !== null && $max !== null) {
-                                            echo htmlspecialchars($min) . '&deg;C - ' . htmlspecialchars($max) . '&deg;C';
-                                        } else {
-                                            echo 'N/A';
-                                        }
-                                    ?>
-                                </td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <table class="table table-bordered table-sm checklist-table">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Temp (&deg;C)</th>
-                            <th>Notes / Corrective Action</th>
-                            <th>Initials</th>
-                        </tr>
-                    </thead>
+            <div class="printable-header mb-3">
+                <h3 class="text-center mb-2">Temperature Monitoring Log</h3>
+                <table class="header-details-table w-100">
                     <tbody>
-                        <?php 
-                        $temperature_checks = $temperature_checks_by_equipment[$equipment_id] ?? [];
-                        if (empty($temperature_checks)): 
-                        ?>
-                            <tr>
-                                <td colspan="5" class="text-center text-muted">No temperature checks recorded for this period.</td>
-                            </tr>
-                        <?php else: ?>
-                            <?php foreach ($temperature_checks as $check): ?>
-                            <tr>
-                                <td><?php echo formatDate($check['check_date'] ?? '', 'd/m/y'); ?></td>
-                                <td><?php echo formatDateTime($check['check_date'] . ' ' . $check['check_time'], 'H:i'); ?></td>
-                                <td><?php echo htmlspecialchars($check['temperature'] ?? ''); ?></td>
-                                <td><?php echo htmlspecialchars($check['notes'] ?? ''); ?> <?php if (!empty($check['corrective_action'])) echo ' | Action: ' . htmlspecialchars($check['corrective_action']); ?></td>
-                                <td><?php 
-                                    $fullName = $check['recorded_by'] ?? 'N/A';
-                                    $parts = explode(' ', $fullName);
-                                    echo htmlspecialchars($parts[0]); // Display only the first part (first name)
-                                ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                        <?php 
-                        // Add blank rows for manual entries
-                        $rowCount = count($temperature_checks);
-                        $daysInMonth = date('t', strtotime($month_year_str));
-                        $blankRows = max(0, $daysInMonth - $rowCount); // One row per day in month
-                        for ($i = 0; $i < $blankRows; $i++): ?>
                         <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
+                            <td><strong>Month:</strong> <?php echo $month_name . ' ' . $year; ?></td>
+                            <td><strong>Location:</strong> 
+                                <?php 
+                                $locations = array_unique(array_map(function($eq) {
+                                    return $eq['location'] ?? 'N/A';
+                                }, $equipment_details_list));
+                                echo htmlspecialchars(implode(', ', $locations));
+                                ?>
+                            </td>
                         </tr>
-                        <?php endfor; ?>
+                        <tr>
+                            <td><strong>Equipment:</strong>
+                                <?php 
+                                $equipment_names = array_map(function($eq) {
+                                    return $eq['name'] ?? 'N/A';
+                                }, $equipment_details_list);
+                                echo htmlspecialchars(implode(', ', $equipment_names));
+                                ?>
+                            </td>
+                            <td><strong>Content:</strong>
+                                <?php 
+                                $contents = array_unique(array_map(function($eq) {
+                                    return $eq['content'] ?? 'N/A';
+                                }, $equipment_details_list));
+                                echo htmlspecialchars(implode(', ', $contents));
+                                ?>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-                
-                <div class="mt-3 mb-4" style="page-break-inside: avoid;">
-                    <p>Reviewed By (Manager Signature): <span class="signature-line"></span> Date: <span class="signature-line"></span></p>
-                </div>
             </div>
-        <?php endforeach; ?>
+
+            <table class="table table-bordered table-sm checklist-table">
+                <thead class="table-light">
+                    <tr>
+                        <th rowspan="2">Date</th>
+                        <?php foreach ($equipment_details_list as $eq_id => $eq_details): ?>
+                        <th colspan="3" class="equipment-header"><?php echo htmlspecialchars($eq_details['name']); ?></th>
+                        <?php endforeach; ?>
+                    </tr>
+                    <tr>
+                        <?php foreach ($equipment_details_list as $eq_id => $eq_details): ?>
+                        <th>Time</th>
+                        <th>Temp (&deg;C)</th>
+                        <th>Initials</th>
+                        <?php endforeach; ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($consolidated_checks)): ?>
+                        <tr>
+                            <td colspan="<?php echo count($equipment_details_list) * 3 + 1; ?>" class="text-center text-muted">
+                                No temperature checks recorded for this period.
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($all_dates as $date => $_): ?>
+                        <tr>
+                            <td><?php echo formatDate($date, 'd/m/y'); ?></td>
+                            
+                            <?php foreach ($equipment_details_list as $eq_id => $eq_details): 
+                                $check = $consolidated_checks[$date][$eq_id] ?? null;
+                            ?>
+                                <td>
+                                    <?php echo $check ? formatDateTime($check['check_date'] . ' ' . $check['check_time'], 'H:i') : '&nbsp;'; ?>
+                                </td>
+                                <td>
+                                    <?php echo $check ? htmlspecialchars($check['temperature'] ?? '') : '&nbsp;'; ?>
+                                </td>
+                                <td>
+                                    <?php 
+                                    if ($check) {
+                                        $fullName = $check['recorded_by'] ?? 'N/A';
+                                        $parts = explode(' ', $fullName);
+                                        echo htmlspecialchars($parts[0]); // Display only the first part (first name)
+                                    } else {
+                                        echo '&nbsp;';
+                                    }
+                                    ?>
+                                </td>
+                            <?php endforeach; ?>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                    
+                    <?php 
+                    // Add blank rows for manual entries
+                    $record_dates_count = count($all_dates);
+                    $daysInMonth = date('t', strtotime($month_year_str));
+                    $blankRows = max(0, $daysInMonth - $record_dates_count); // One row per day in month
+                    for ($i = 0; $i < $blankRows; $i++): ?>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <?php foreach ($equipment_details_list as $eq_id => $eq_details): ?>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <?php endforeach; ?>
+                    </tr>
+                    <?php endfor; ?>
+                </tbody>
+            </table>
+            
+            <div class="verification-section">
+                <p>Reviewed By (Manager Signature): <span class="signature-line"></span> Date: <span class="signature-line"></span></p>
+            </div>
         </div>
 
     <?php endif; // End if equipment selected ?>
