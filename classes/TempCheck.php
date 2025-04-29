@@ -198,9 +198,11 @@ class TempCheck {
      * @param int $offset Offset for pagination
      * @param string $period Period filter (week, month, year or null for all)
      * @param int $equipment_id Equipment ID (optional)
+     * @param string $start_date Start date (YYYY-MM-DD) (optional)
+     * @param string $end_date End date (YYYY-MM-DD) (optional)
      * @return array Result with checks and total count
      */
-    public function getAllPaginated($limit = 20, $offset = 0, $period = null, $equipment_id = null) {
+    public function getAllPaginated($limit = 20, $offset = 0, $period = null, $equipment_id = null, $start_date = null, $end_date = null) {
         $params = [];
         $where = [];
         
@@ -216,6 +218,19 @@ class TempCheck {
             } elseif ($period == 'year') {
                 $where[] = "tc.check_date >= DATE_SUB(?, INTERVAL 1 YEAR)";
                 $params[] = $today;
+            }
+        }
+        
+        // Apply date range filter if period is not set or if explicit dates are provided
+        if (!$period || ($start_date && $end_date)) {
+            if ($start_date) {
+                $where[] = "tc.check_date >= ?";
+                $params[] = $start_date;
+            }
+            
+            if ($end_date) {
+                $where[] = "tc.check_date <= ?";
+                $params[] = $end_date;
             }
         }
         

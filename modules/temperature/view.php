@@ -67,10 +67,15 @@ if ($check_id) {
 }
 
 // Get temperature checks based on filters with pagination
-$temperature_checks = $check_id ? [] : $temp_check->getAll($start_date, $end_date, $equipment_id, $records_per_page, $offset);
+if ($check_id) {
+    $temperature_checks = [];
+    $total_records = 0;
+} else {
+    $result = $temp_check->getAllPaginated($records_per_page, $offset, $period, $equipment_id, $start_date, $end_date);
+    $temperature_checks = $result['records'];
+    $total_records = $result['total'];
+}
 
-// Get total count for pagination
-$total_records = $check_id ? 0 : $temp_check->countAll($start_date, $end_date, $equipment_id);
 $total_pages = ceil($total_records / $records_per_page);
 
 // Page actions
