@@ -235,9 +235,19 @@ $total_days = 0;
 
 echo "\nStarting to insert cleaning logs from {$start_date} to {$end_date}...\n";
 
-// Process each day from start date to end date
-$current_date = new DateTime($start_date);
-$end_date_obj = new DateTime($end_date);
+// Add debugging information
+echo "\nLocation IDs being used: " . implode(", ", $valid_locations) . "\n";
+echo "First few tasks:\n";
+$count = 0;
+foreach ($tasks_by_location as $loc_id => $tasks) {
+    foreach ($tasks as $task) {
+        echo "- Location $loc_id, Task {$task['task_id']}: {$task['description']} ({$task['frequency']})\n";
+        $count++;
+        if ($count >= 5) break;
+    }
+    if ($count >= 5) break;
+}
+echo "\n";
 
 // Check if there are already entries within this date range
 try {
@@ -267,6 +277,9 @@ try {
 }
 
 // Main loop to insert logs
+$current_date = new DateTime($start_date);
+$end_date_obj = new DateTime($end_date);
+
 while ($current_date <= $end_date_obj) {
     $date = $current_date->format('Y-m-d');
     $day_of_week = (int)$current_date->format('N'); // 1 (Monday) to 7 (Sunday)
@@ -288,12 +301,11 @@ while ($current_date <= $end_date_obj) {
                 $log_data = [
                     'task_id' => $task['task_id'],
                     'location_id' => $location_id,
-                    'completed_date' => $date,
-                    'completed_time' => $completion_time,
+                    'cleaning_date' => $date,
+                    'cleaning_time' => $completion_time,
                     'completed_by_user_id' => $staff_id,
-                    'is_verified' => 1, // Task is completed (mapped to is_verified)
-                    'notes' => null,
-                    'created_at' => date('Y-m-d H:i:s')
+                    'is_completed' => 1,
+                    'notes' => null
                 ];
                 
                 try {
@@ -310,6 +322,7 @@ while ($current_date <= $end_date_obj) {
                     
                     if ($error_count <= 5) {
                         echo "Error creating log for task {$task['task_id']} on $date: " . $e->getMessage() . "\n";
+                        echo "Data: " . json_encode($log_data) . "\n";
                     } else if ($error_count == 6) {
                         echo "Additional errors suppressed...\n";
                     }
