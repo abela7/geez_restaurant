@@ -2,7 +2,7 @@
 /**
  * View Temperature Checks Page
  * 
- * Allows users to view temperature check history
+ * Allows users to view temperature checks history with pagination
  */
 
 // Set page title
@@ -28,6 +28,33 @@ $equipment_id = isset($_GET['equipment_id']) ? (int)$_GET['equipment_id'] : null
 $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-d', strtotime('-7 days'));
 $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-d');
 
+// Get period filter (new)
+$period = isset($_GET['period']) ? $_GET['period'] : 'week';
+
+// Set dates based on period if not manually specified
+if (!isset($_GET['start_date']) || !isset($_GET['end_date'])) {
+    switch ($period) {
+        case 'week':
+            $start_date = date('Y-m-d', strtotime('-7 days'));
+            $end_date = date('Y-m-d');
+            break;
+        case 'month':
+            $start_date = date('Y-m-d', strtotime('first day of this month'));
+            $end_date = date('Y-m-d');
+            break;
+        case 'year':
+            $start_date = date('Y-01-01');
+            $end_date = date('Y-m-d');
+            break;
+    }
+}
+
+// Pagination parameters (new)
+$records_per_page = 20; // Show 20 records per page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+$offset = ($page - 1) * $records_per_page;
+
 // Get specific check if ID provided
 $check_id = isset($_GET['id']) ? (int)$_GET['id'] : null;
 $check_details = null;
@@ -39,8 +66,12 @@ if ($check_id) {
     }
 }
 
-// Get temperature checks based on filters
-$temperature_checks = $check_id ? [] : $temp_check->getAll($start_date, $end_date, $equipment_id);
+// Get temperature checks based on filters with pagination
+$temperature_checks = $check_id ? [] : $temp_check->getAll($start_date, $end_date, $equipment_id, $records_per_page, $offset);
+
+// Get total count for pagination
+$total_records = $check_id ? 0 : $temp_check->countAll($start_date, $end_date, $equipment_id);
+$total_pages = ceil($total_records / $records_per_page);
 
 // Page actions
 $page_actions = '
@@ -165,6 +196,15 @@ if (hasRole(['admin', 'manager'])) {
             </div>
             <div class="card-body">
                 <form method="get" action="" class="row g-3">
+                    <!-- Period quick selection buttons (new) -->
+                    <div class="col-md-12 mb-3">
+                        <div class="btn-group w-100" role="group" aria-label="Time period">
+                            <a href="<?php echo BASE_URL; ?>/modules/temperature/view.php?period=week&equipment_id=<?php echo $equipment_id; ?>" class="btn btn-outline-primary <?php echo $period == 'week' ? 'active' : ''; ?>">This Week</a>
+                            <a href="<?php echo BASE_URL; ?>/modules/temperature/view.php?period=month&equipment_id=<?php echo $equipment_id; ?>" class="btn btn-outline-primary <?php echo $period == 'month' ? 'active' : ''; ?>">This Month</a>
+                            <a href="<?php echo BASE_URL; ?>/modules/temperature/view.php?period=year&equipment_id=<?php echo $equipment_id; ?>" class="btn btn-outline-primary <?php echo $period == 'year' ? 'active' : ''; ?>">This Year</a>
+                        </div>
+                    </div>
+                    
                     <div class="col-md-4">
                         <label for="equipment_id" class="form-label">Equipment</label>
                         <select class="form-select" id="equipment_id" name="equipment_id">
@@ -210,6 +250,15 @@ if (hasRole(['admin', 'manager'])) {
                 <?php if (empty($temperature_checks)): ?>
                 <p class="text-muted">No temperature checks found for the selected criteria.</p>
                 <?php else: ?>
+                <!-- Pagination info (new) -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <p class="text-muted mb-0">
+                        Showing <?php echo min(($page - 1) * $records_per_page + 1, $total_records); ?> to 
+                        <?php echo min($page * $records_per_page, $total_records); ?> of 
+                        <?php echo $total_records; ?> records
+                    </p>
+                </div>
+                
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
                         <thead>
@@ -253,6 +302,62 @@ if (hasRole(['admin', 'manager'])) {
                         </tbody>
                     </table>
                 </div>
+                
+                <!-- Pagination controls (new) -->
+                <?php if ($total_pages > 1): ?>
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <?php if ($page > 1): ?>
+                        <li class="page-item">
+                            <a class="page-link" href="<?php echo BASE_URL; ?>/modules/temperature/view.php?page=1&period=<?php echo $period; ?>&equipment_id=<?php echo $equipment_id; ?>&start_date=<?php echo $start_date; ?>&end_date=<?php echo $end_date; ?>">
+                                First
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="<?php echo BASE_URL; ?>/modules/temperature/view.php?page=<?php echo $page - 1; ?>&period=<?php echo $period; ?>&equipment_id=<?php echo $equipment_id; ?>&start_date=<?php echo $start_date; ?>&end_date=<?php echo $end_date; ?>">
+                                Previous
+                            </a>
+                        </li>
+                        <?php endif; ?>
+                        
+                        <?php
+                        // Show limited page numbers with current page in the middle
+                        $start_page = max(1, $page - 2);
+                        $end_page = min($total_pages, $page + 2);
+                        
+                        // Ensure we always show 5 pages when possible
+                        if ($end_page - $start_page < 4) {
+                            if ($start_page == 1) {
+                                $end_page = min($total_pages, $start_page + 4);
+                            } elseif ($end_page == $total_pages) {
+                                $start_page = max(1, $end_page - 4);
+                            }
+                        }
+                        
+                        for ($i = $start_page; $i <= $end_page; $i++):
+                        ?>
+                        <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                            <a class="page-link" href="<?php echo BASE_URL; ?>/modules/temperature/view.php?page=<?php echo $i; ?>&period=<?php echo $period; ?>&equipment_id=<?php echo $equipment_id; ?>&start_date=<?php echo $start_date; ?>&end_date=<?php echo $end_date; ?>">
+                                <?php echo $i; ?>
+                            </a>
+                        </li>
+                        <?php endfor; ?>
+                        
+                        <?php if ($page < $total_pages): ?>
+                        <li class="page-item">
+                            <a class="page-link" href="<?php echo BASE_URL; ?>/modules/temperature/view.php?page=<?php echo $page + 1; ?>&period=<?php echo $period; ?>&equipment_id=<?php echo $equipment_id; ?>&start_date=<?php echo $start_date; ?>&end_date=<?php echo $end_date; ?>">
+                                Next
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="<?php echo BASE_URL; ?>/modules/temperature/view.php?page=<?php echo $total_pages; ?>&period=<?php echo $period; ?>&equipment_id=<?php echo $equipment_id; ?>&start_date=<?php echo $start_date; ?>&end_date=<?php echo $end_date; ?>">
+                                Last
+                            </a>
+                        </li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
+                <?php endif; ?>
                 <?php endif; ?>
             </div>
         </div>
@@ -262,5 +367,5 @@ if (hasRole(['admin', 'manager'])) {
 
 <?php
 // Include footer
-require_once INCLUDE_PATH . '/footer.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/includes/footer.php';
 ?>

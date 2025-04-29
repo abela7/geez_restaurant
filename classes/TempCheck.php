@@ -190,4 +190,73 @@ class TempCheck {
         
         return $this->db->fetchAll($sql, [$equipment_id]);
     }
+    
+    /**
+     * Get temperature checks with pagination and period filtering
+     * 
+     * @param int $limit Records per page
+     * @param int $offset Offset for pagination
+     * @param string $period Period filter (week, month, year or null for all)
+     * @param int $equipment_id Equipment ID (optional)
+     * @return array Result with checks and total count
+     */
+    public function getAllPaginated($limit = 20, $offset = 0, $period = null, $equipment_id = null) {
+        $params = [];
+        $where = [];
+        
+        // Apply period filter
+        if ($period) {
+            $today = date('Y-m-d');
+            if ($period == 'week') {
+                $where[] = "tc.check_date >= DATE_SUB(?, INTERVAL 1 WEEK)";
+                $params[] = $today;
+            } elseif ($period == 'month') {
+                $where[] = "tc.check_date >= DATE_SUB(?, INTERVAL 1 MONTH)";
+                $params[] = $today;
+            } elseif ($period == 'year') {
+                $where[] = "tc.check_date >= DATE_SUB(?, INTERVAL 1 YEAR)";
+                $params[] = $today;
+            }
+        }
+        
+        if ($equipment_id) {
+            $where[] = "tc.equipment_id = ?";
+            $params[] = $equipment_id;
+        }
+        
+        $where_clause = !empty($where) ? "WHERE " . implode(" AND ", $where) : "";
+        
+        // Get total count
+        $count_sql = "SELECT COUNT(*) as total 
+                     FROM temperature_checks tc 
+                     JOIN equipment e ON tc.equipment_id = e.equipment_id 
+                     JOIN users u ON tc.checked_by_user_id = u.user_id 
+                     {$where_clause}";
+        
+        $total_count = $this->db->fetchRow($count_sql, $params)['total'];
+        
+        // Clone params for main query
+        $query_params = $params;
+        
+        // Get paginated results
+        $sql = "SELECT tc.*, CONCAT(tc.check_date, ' ', tc.check_time) as check_timestamp, 
+                tc.temperature as temperature_reading, tc.created_at as recorded_at,
+                e.name as equipment_name, u.full_name as recorded_by 
+                FROM temperature_checks tc 
+                JOIN equipment e ON tc.equipment_id = e.equipment_id 
+                JOIN users u ON tc.checked_by_user_id = u.user_id 
+                {$where_clause} 
+                ORDER BY tc.check_date DESC, tc.check_time DESC
+                LIMIT ? OFFSET ?";
+        
+        $query_params[] = (int)$limit;
+        $query_params[] = (int)$offset;
+        
+        $results = $this->db->fetchAll($sql, $query_params);
+        
+        return [
+            'records' => $results,
+            'total' => $total_count
+        ];
+    }
 }
