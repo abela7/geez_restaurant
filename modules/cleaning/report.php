@@ -120,7 +120,7 @@ $page_actions = '
                     $loc_id = $log['location_id'];
                     if (!isset($location_logs[$loc_id])) {
                         $location_logs[$loc_id] = [
-                            'name' => $log['location_name'],
+                            'name' => $log['name'] ?? 'Unknown Location',
                             'logs' => [],
                             'completed' => 0,
                             'total' => 0
@@ -317,15 +317,15 @@ $page_actions = '
                             <?php foreach ($cleaning_logs as $log): ?>
                             <tr>
                                 <td><?php echo !empty($log['completed_date']) ? formatDate($log['completed_date'], 'd M Y') : 'N/A'; ?></td>
-                                <td><?php echo htmlspecialchars($log['location_name']); ?></td>
-                                <td><?php echo htmlspecialchars($log['task_description']); ?></td>
+                                <td><?php echo !empty($log['location_name']) ? htmlspecialchars($log['location_name']) : htmlspecialchars($log['name'] ?? 'Unknown Location'); ?></td>
+                                <td><?php echo !empty($log['task_description']) ? htmlspecialchars($log['task_description']) : 'Unknown Task'; ?></td>
                                 <td>
                                     <span class="badge bg-<?php echo $log['is_completed'] ? 'success' : 'danger'; ?>">
                                         <?php echo $log['is_completed'] ? 'Completed' : 'Incomplete'; ?>
                                     </span>
                                 </td>
                                 <td><?php echo !empty($log['notes']) ? htmlspecialchars($log['notes']) : ''; ?></td>
-                                <td><?php echo htmlspecialchars($log['recorded_by']); ?></td>
+                                <td><?php echo !empty($log['recorded_by']) ? htmlspecialchars($log['recorded_by']) : 'Unknown'; ?></td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
