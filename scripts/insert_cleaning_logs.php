@@ -3,7 +3,7 @@
  * Insert Cleaning Logs Script
  * 
  * Populates cleaning logs from August 12, 2023 to the current date
- * for kitchen areas (locations 5, 6, and
+ * for kitchen areas (locations 5, 6, and 8)
  */
 
 // Include configuration and common functions
@@ -61,42 +61,24 @@ if (empty($valid_locations)) {
     echo "No valid locations found. Creating kitchen locations...\n";
     
     $kitchen_locations = [
-        ['location_id' => 5, 'name' => 'Kitchen - Prep Area', 'description' => 'Food preparation area in kitchen'],
-        ['location_id' => 6, 'name' => 'Kitchen - Cooking Area', 'description' => 'Stoves, ovens and cooking equipment'],
-        ['location_id' => 8, 'name' => 'Kitchen - Floor Area', 'description' => 'Kitchen floors and surfaces']
+        ['name' => 'Kitchen - Prep Area', 'description' => 'Food preparation area in kitchen'],
+        ['name' => 'Kitchen - Cooking Area', 'description' => 'Stoves, ovens and cooking equipment'],
+        ['name' => 'Kitchen - Floor Area', 'description' => 'Kitchen floors and surfaces']
     ];
     
     foreach ($kitchen_locations as $loc_data) {
-        $loc_id = $loc_data['location_id'];
         $loc_data['is_active'] = 1;
         $loc_data['created_at'] = date('Y-m-d H:i:s');
         
         try {
-            // Try direct insert first with location_id
-            $sql = "INSERT INTO cleaning_locations (location_id, name, description, is_active, created_at) 
-                    VALUES (?, ?, ?, ?, ?)";
-            $result = $db->execute($sql, [
-                $loc_data['location_id'],
-                $loc_data['name'],
-                $loc_data['description'],
-                $loc_data['is_active'],
-                $loc_data['created_at']
-            ]);
-            
-            echo "Created location {$loc_data['name']} with ID {$loc_id}\n";
-            $valid_locations[] = $loc_id;
-        } catch (Exception $e) {
-            // If direct insert fails, try without specifying ID
-            unset($loc_data['location_id']);
-            try {
-                $new_id = $cleaning_location->create($loc_data);
-                if ($new_id) {
-                    echo "Created location {$loc_data['name']} with auto-generated ID {$new_id}\n";
-                    $valid_locations[] = $new_id;
-                }
-            } catch (Exception $e2) {
-                echo "Error creating location: " . $e2->getMessage() . "\n";
+            // Use the create method from CleaningLocation class
+            $new_id = $cleaning_location->create($loc_data);
+            if ($new_id) {
+                echo "Created location {$loc_data['name']} with ID {$new_id}\n";
+                $valid_locations[] = $new_id;
             }
+        } catch (Exception $e) {
+            echo "Error creating location: " . $e->getMessage() . "\n";
         }
     }
 }
@@ -153,59 +135,48 @@ if (empty($tasks_by_location) || $task_count == 0) {
     // Define sample tasks for kitchen areas
     $sample_tasks = [
         // Daily tasks (basics that should almost always be done)
-        ['location_id' => 5, 'description' => 'Clean kitchen counters', 'frequency' => 'daily'],
-        ['location_id' => 5, 'description' => 'Sanitize food prep areas', 'frequency' => 'daily'],
-        ['location_id' => 5, 'description' => 'Empty kitchen trash bins', 'frequency' => 'daily'],
-        ['location_id' => 6, 'description' => 'Clean stove tops', 'frequency' => 'daily'],
-        ['location_id' => 6, 'description' => 'Clean kitchen sinks', 'frequency' => 'daily'],
-        ['location_id' => 8, 'description' => 'Sweep kitchen floors', 'frequency' => 'daily'],
-        ['location_id' => 8, 'description' => 'Mop kitchen floors', 'frequency' => 'daily'],
+        ['description' => 'Clean kitchen counters', 'frequency' => 'daily'],
+        ['description' => 'Sanitize food prep areas', 'frequency' => 'daily'],
+        ['description' => 'Empty kitchen trash bins', 'frequency' => 'daily'],
+        ['description' => 'Clean stove tops', 'frequency' => 'daily'],
+        ['description' => 'Clean kitchen sinks', 'frequency' => 'daily'],
+        ['description' => 'Sweep kitchen floors', 'frequency' => 'daily'],
+        ['description' => 'Mop kitchen floors', 'frequency' => 'daily'],
         
         // Weekly tasks
-        ['location_id' => 5, 'description' => 'Deep clean refrigerators', 'frequency' => 'weekly'],
-        ['location_id' => 6, 'description' => 'Clean oven interior', 'frequency' => 'weekly'],
-        ['location_id' => 6, 'description' => 'Clean kitchen hoods', 'frequency' => 'weekly'],
-        ['location_id' => 8, 'description' => 'Clean kitchen walls', 'frequency' => 'weekly'],
+        ['description' => 'Deep clean refrigerators', 'frequency' => 'weekly'],
+        ['description' => 'Clean oven interior', 'frequency' => 'weekly'],
+        ['description' => 'Clean kitchen hoods', 'frequency' => 'weekly'],
+        ['description' => 'Clean kitchen walls', 'frequency' => 'weekly'],
         
         // Monthly tasks
-        ['location_id' => 5, 'description' => 'Clean behind refrigerators', 'frequency' => 'monthly'],
-        ['location_id' => 6, 'description' => 'Descale coffee machines', 'frequency' => 'monthly'],
-        ['location_id' => 8, 'description' => 'Deep clean floor drains', 'frequency' => 'monthly'],
+        ['description' => 'Clean behind refrigerators', 'frequency' => 'monthly'],
+        ['description' => 'Descale coffee machines', 'frequency' => 'monthly'],
+        ['description' => 'Deep clean floor drains', 'frequency' => 'monthly'],
     ];
     
-    // Map sample tasks to valid location IDs if needed
-    if (count($valid_locations) < 3) {
-        $loc_map = array_combine([5, 6, 8], array_pad($valid_locations, 3, $valid_locations[0]));
-        foreach ($sample_tasks as &$task_data) {
-            $task_data['location_id'] = $loc_map[$task_data['location_id']] ?? $valid_locations[0];
-        }
-    }
-    
-    // Create the tasks
+    // Create tasks for each location
     $created_count = 0;
-    foreach ($sample_tasks as $task_data) {
-        try {
-            $task_data['is_active'] = 1;
-            $task_data['created_at'] = date('Y-m-d H:i:s');
-            
-            // Ensure location ID is valid
-            if (!in_array($task_data['location_id'], $valid_locations)) {
-                $task_data['location_id'] = $valid_locations[0];
-            }
-            
-            $task_id = $cleaning_task->create($task_data);
-            
-            if ($task_id) {
-                $location_id = $task_data['location_id'];
-                if (!isset($tasks_by_location[$location_id])) {
-                    $tasks_by_location[$location_id] = [];
+    foreach ($valid_locations as $location_id) {
+        foreach ($sample_tasks as $task_data) {
+            try {
+                $task_data['location_id'] = $location_id;
+                $task_data['is_active'] = 1;
+                $task_data['created_at'] = date('Y-m-d H:i:s');
+                
+                $task_id = $cleaning_task->create($task_data);
+                
+                if ($task_id) {
+                    if (!isset($tasks_by_location[$location_id])) {
+                        $tasks_by_location[$location_id] = [];
+                    }
+                    $task_data['task_id'] = $task_id;
+                    $tasks_by_location[$location_id][] = $task_data;
+                    $created_count++;
                 }
-                $task_data['task_id'] = $task_id;
-                $tasks_by_location[$location_id][] = $task_data;
-                $created_count++;
+            } catch (Exception $e) {
+                echo "Error creating task '{$task_data['description']}': " . $e->getMessage() . "\n";
             }
-        } catch (Exception $e) {
-            echo "Error creating task '{$task_data['description']}': " . $e->getMessage() . "\n";
         }
     }
     
