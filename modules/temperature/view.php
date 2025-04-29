@@ -109,10 +109,39 @@ $page_actions = '
                     <a href="<?php echo BASE_URL; ?>/modules/temperature/view.php" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Back to List
                     </a>
+                    <a href="<?php echo BASE_URL; ?>/modules/temperature/edit.php?id=<?php echo $check_details['check_id']; ?>" class="btn btn-outline-primary">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
                     <a href="<?php echo BASE_URL; ?>/modules/temperature/print.php?id=<?php echo $check_details['check_id']; ?>" class="btn btn-outline-primary" target="_blank">
                         <i class="bi bi-printer"></i> Print
                     </a>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this temperature check record? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" action="<?php echo BASE_URL; ?>/modules/temperature/delete.php">
+                    <?php echo getCsrfTokenField(); ?>
+                    <input type="hidden" name="check_id" value="<?php echo $check_details['check_id']; ?>">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
             </div>
         </div>
     </div>
@@ -202,6 +231,13 @@ $page_actions = '
                                 <td>
                                     <a href="<?php echo BASE_URL; ?>/modules/temperature/view.php?id=<?php echo $check['check_id']; ?>" class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-eye"></i> View
+                                    </a>
+                                    <a href="<?php echo BASE_URL; ?>/modules/temperature/edit.php?id=<?php echo $check['check_id']; ?>" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <a href="#" class="btn btn-sm btn-outline-danger" 
+                                       onclick="if(confirm('Are you sure you want to delete this record?')) window.location.href='<?php echo BASE_URL; ?>/modules/temperature/delete.php?id=<?php echo $check['check_id']; ?>&csrf_token=<?php echo urlencode(generateCsrfToken()); ?>'">
+                                        <i class="bi bi-trash"></i> Delete
                                     </a>
                                 </td>
                             </tr>
