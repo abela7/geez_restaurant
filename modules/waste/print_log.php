@@ -78,7 +78,12 @@ $page_title = 'Food Waste Log (' . formatDate($start_date, 'd/m/y') . ' - ' . fo
     <style>
         /* Print Styles */
         @media print {
-            body { font-size: 9pt; -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
+            body { 
+                font-size: 9pt; 
+                -webkit-print-color-adjust: exact !important; 
+                color-adjust: exact !important; 
+                background-color: white !important;
+            }
             /* Adjust margins to minimize browser header/footer space */
             @page { 
                 margin: 0.5in; /* Default margin for content */
@@ -86,14 +91,67 @@ $page_title = 'Food Waste Log (' . formatDate($start_date, 'd/m/y') . ' - ' . fo
                 /* margin-top: 0.25in; */
                 /* margin-bottom: 0.25in; */
             }
-            .table td, .table th { padding: 0.2rem 0.4rem; vertical-align: middle; font-size: 8pt; /* Smaller font for table */}
-            .table thead th { background-color: #e9ecef !important; font-weight: bold; text-align: center; }
-             h1, h2, h3, h4, h5, h6 { margin-top: 0; margin-bottom: 0.5rem; }
-            .container { max-width: 100% !important; width: 100% !important; }
-            a[href]:after { content: none !important; }
-            .printable-header td { border: none; padding: 2px 5px; font-size: 10pt; }
-            .summary-table td { border: none; padding: 1px 5px; font-size: 10pt; }
-            .totals-row td { font-weight: bold; border-top: 2px solid black !important; }
+            /* Hide everything marked with no-print class */
+            .no-print {
+                display: none !important;
+            }
+            /* Hide nav, header, footer, etc. */
+            nav, header, footer, .sidebar, .navbar, .nav {
+                display: none !important;
+            }
+            /* Top level container takes full width */
+            .container-fluid, .container {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            /* Table styles */
+            .table td, .table th { 
+                padding: 0.2rem 0.4rem; 
+                vertical-align: middle; 
+                font-size: 8pt;
+                border-color: #000 !important;
+            }
+            .table thead th { 
+                background-color: #e9ecef !important; 
+                font-weight: bold; 
+                text-align: center;
+            }
+            /* Headers */
+            h1, h2, h3, h4, h5, h6 { 
+                margin-top: 0; 
+                margin-bottom: 0.5rem; 
+            }
+            /* Remove link styling */
+            a[href]:after { 
+                content: none !important; 
+            }
+            /* Header table styles */
+            .printable-header {
+                margin-bottom: 15px !important;
+            }
+            .printable-header td { 
+                border: none !important; 
+                padding: 2px 5px; 
+                font-size: 10pt; 
+            }
+            .summary-table td { 
+                border: none !important; 
+                padding: 1px 5px; 
+                font-size: 10pt; 
+            }
+            .totals-row td { 
+                font-weight: bold; 
+                border-top: 2px solid black !important; 
+            }
+            /* Page break behavior */
+            .page-break-before { 
+                page-break-before: always; 
+            }
+            .avoid-break { 
+                page-break-inside: avoid; 
+            }
         }
         /* Screen Styles */
         .waste-log-table { margin-top: 20px; font-size: 0.9rem; }
@@ -174,6 +232,12 @@ $page_title = 'Food Waste Log (' . formatDate($start_date, 'd/m/y') . ' - ' . fo
                     <td><?php echo getWasteUserInitials($log['recorded_by_user_id'], $db); ?></td>
                 </tr>
                 <?php endforeach; ?>
+                <!-- Add total row -->
+                <tr class="totals-row">
+                    <td colspan="6" class="text-end"><strong>Total Cost:</strong></td>
+                    <td class="num-col"><strong><?php echo formatCurrency($total_cost_period); ?></strong></td>
+                    <td colspan="2"></td>
+                </tr>
             <?php endif; ?>
              <?php 
              // Add blank rows if needed for manual entries
@@ -188,6 +252,11 @@ $page_title = 'Food Waste Log (' . formatDate($start_date, 'd/m/y') . ' - ' . fo
             <?php endfor; ?>
         </tbody>
     </table>
+
+    <!-- Footer for printed page -->
+    <div class="mt-4 avoid-break">
+        <p class="small text-muted">Generated from Geez Restaurant Management System on <?php echo date('d/m/Y H:i'); ?></p>
+    </div>
 
 </div> <!-- /container -->
 
