@@ -12,6 +12,14 @@ require_once INCLUDE_PATH . '/functions.php';
 // Set timezone
 date_default_timezone_set('Europe/London');
 
+// Initialize database connection
+try {
+    $conn = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+
 // Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_name(SESSION_NAME);
