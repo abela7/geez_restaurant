@@ -38,6 +38,30 @@ require_once INCLUDE_PATH . '/header.php';
     </div>
 </div>
 
+<!-- Batch Monthly Reports Highlight Card -->
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card bg-light border-primary">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h5 class="card-title"><i class="bi bi-calendar-month"></i> <strong>Batch Monthly Reports</strong></h5>
+                        <p class="card-text">
+                            Generate and print monthly reports for Temperature Checklists, Weekly Cleaning, and Food Waste Logs. 
+                            Easily organize reports by month from August 2023 to the current date.
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="<?php echo BASE_URL; ?>/batch_monthly_reports.php" class="btn btn-primary">
+                            <i class="bi bi-file-earmark-text"></i> Generate Monthly Reports
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <!-- Temperature Checklist Card -->
     <div class="col-md-4 mb-4">

@@ -232,12 +232,6 @@ $page_title = 'Food Waste Log (' . formatDate($start_date, 'd/m/y') . ' - ' . fo
                     <td><?php echo getWasteUserInitials($log['recorded_by_user_id'], $db); ?></td>
                 </tr>
                 <?php endforeach; ?>
-                <!-- Add total row -->
-                <tr class="totals-row">
-                    <td colspan="6" class="text-end"><strong>Total Cost:</strong></td>
-                    <td class="num-col"><strong><?php echo formatCurrency($total_cost_period); ?></strong></td>
-                    <td colspan="2"></td>
-                </tr>
             <?php endif; ?>
              <?php 
              // Add blank rows if needed for manual entries
