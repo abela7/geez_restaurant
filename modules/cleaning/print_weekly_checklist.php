@@ -147,7 +147,11 @@ if ($selected_location) {
     <style>
         /* Print Styles */
         @media print {
-            body { font-size: 9pt; -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
+            body { 
+                font-size: 9pt; 
+                -webkit-print-color-adjust: exact !important; 
+                color-adjust: exact !important; 
+            }
             @page { margin: 0.5in; }
             .table td, .table th { padding: 0.2rem 0.4rem; vertical-align: middle; }
             .table thead th { background-color: #e9ecef !important; font-weight: bold; text-align: center; }
@@ -155,10 +159,26 @@ if ($selected_location) {
             .day-col { width: 6%; text-align: center; } /* Narrower day columns */
             .no-col { width: 4%; text-align: right; padding-right: 5px !important; } /* Number column */
             .initials-col { width: 10%; text-align: center; } /* If we add a separate initials column */
-             h1, h2, h3, h4, h5, h6 { margin-top: 0; margin-bottom: 0.5rem; }
-            .container { max-width: 100% !important; width: 100% !important; }
+            h1, h2, h3, h4, h5, h6 { margin-top: 0; margin-bottom: 0.5rem; }
+            .container { max-width: 100% !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
             a[href]:after { content: none !important; }
             .printable-header td { border: none; padding: 2px 5px; font-size: 10pt; }
+            
+            /* Hide everything except the checklist */
+            .no-print, nav, header, footer, .navbar, #sidebar, .selection-form { 
+                display: none !important; 
+            }
+            
+            /* Remove extra margins/padding around the printable area */
+            .printable-area {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            /* Ensure the checklist starts at the top of the page */
+            .container.mt-4 {
+                margin-top: 0 !important;
+            }
         }
         /* Screen Styles */
         .checklist-table { margin-top: 20px; }
@@ -175,7 +195,7 @@ if ($selected_location) {
 <div class="container mt-4">
 
     <!-- Selection Form (No Print) -->
-    <div class="no-print mb-4 p-3 border rounded bg-light">
+    <div class="no-print mb-4 p-3 border rounded bg-light selection-form">
         <h4>Generate Weekly Cleaning Checklist</h4>
         <form method="get" action="" class="row g-3 align-items-end">
             <div class="col-md-4">
@@ -218,85 +238,88 @@ if ($selected_location) {
         <div class="alert alert-info no-print">Please select location and week to generate the checklist.</div>
     <?php else: ?>
         
-        <div class="printable-header mb-3">
-             <h3 class="text-center">Daily & Weekly Cleaning Checklist</h3>
-             <table class="header-details-table w-100">
-                 <tr>
-                     <td><strong>Location:</strong> <?php echo htmlspecialchars($selected_location['name']); ?></td>
-                     <td><strong>Week Start:</strong> <?php echo formatDate($week_start_date, 'd/m/Y'); ?></td>
-                     <td><strong>Approved By:</strong> <?php echo $approver_details ? htmlspecialchars($approver_details['full_name']) : '.......................'; ?></td>
-                 </tr>
-                 <tr>
-                     <td></td>
-                     <td><strong>Week End:</strong> <?php echo formatDate($week_end_date, 'd/m/Y'); ?></td>
-                     <td><strong>Signature:</strong> <span class="signature-line"></span></td>
-                 </tr>
-             </table>
-        </div>
+        <div class="printable-area">
+            <div class="printable-header mb-3">
+                <h3 class="text-center">Daily & Weekly Cleaning Checklist</h3>
+                <table class="header-details-table w-100">
+                    <tr>
+                        <td><strong>Location:</strong> <?php echo htmlspecialchars($selected_location['name']); ?></td>
+                        <td><strong>Week Start:</strong> <?php echo formatDate($week_start_date, 'd/m/Y'); ?></td>
+                        <td><strong>Approved By:</strong> <?php echo $approver_details ? htmlspecialchars($approver_details['full_name']) : '.......................'; ?></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>Week End:</strong> <?php echo formatDate($week_end_date, 'd/m/Y'); ?></td>
+                        <td><strong>Signature:</strong> <span class="signature-line"></span></td>
+                    </tr>
+                </table>
+            </div>
 
-        <table class="table table-bordered table-sm checklist-table">
-            <thead>
-                <tr>
-                    <th class="no-col">No</th>
-                    <th class="task-col">Task</th>
-                    <th class="day-col">M</th>
-                    <th class="day-col">T</th>
-                    <th class="day-col">W</th>
-                    <th class="day-col">T</th>
-                    <th class="day-col">F</th>
-                    <th class="day-col">S</th>
-                    <th class="day-col">S</th>
-                    <?php /* <th class="initials-col">Cleaned By</th> */ ?>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (empty($tasks)): ?>
+            <table class="table table-bordered table-sm checklist-table">
+                <thead>
                     <tr>
-                        <td colspan="10" class="text-center text-muted">No cleaning tasks found for this location.</td>
+                        <th class="no-col">No</th>
+                        <th class="task-col">Task</th>
+                        <th class="day-col">M</th>
+                        <th class="day-col">T</th>
+                        <th class="day-col">W</th>
+                        <th class="day-col">T</th>
+                        <th class="day-col">F</th>
+                        <th class="day-col">S</th>
+                        <th class="day-col">S</th>
+                        <?php /* <th class="initials-col">Cleaned By</th> */ ?>
                     </tr>
-                <?php else: ?>
-                    <?php $task_num = 1; ?>
-                    <?php foreach ($tasks as $task): ?>
-                    <tr>
-                        <td class="no-col"><?php echo $task_num++; ?></td>
-                        <td class="task-col"><?php echo htmlspecialchars($task['description']); ?></td>
-                        <?php foreach ($week_dates as $day => $date): ?>
-                            <td class="day-col">
-                                <?php 
-                                $user_id_completed = $log_data[$task['task_id']][$date] ?? null;
-                                echo $user_id_completed ? getCleaningUserInitials($user_id_completed, $db) : '';
-                                ?>
-                            </td>
+                </thead>
+                <tbody>
+                    <?php if (empty($tasks)): ?>
+                        <tr>
+                            <td colspan="10" class="text-center text-muted">No cleaning tasks found for this location.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php $task_num = 1; ?>
+                        <?php foreach ($tasks as $task): ?>
+                        <tr>
+                            <td class="no-col"><?php echo $task_num++; ?></td>
+                            <td class="task-col"><?php echo htmlspecialchars($task['description']); ?></td>
+                            <?php foreach ($week_dates as $day => $date): ?>
+                                <td class="day-col">
+                                    <?php 
+                                    $user_id_completed = $log_data[$task['task_id']][$date] ?? null;
+                                    echo $user_id_completed ? getCleaningUserInitials($user_id_completed, $db) : '';
+                                    ?>
+                                </td>
+                            <?php endforeach; ?>
+                             <?php /* <td></td> Column for Cleaned By if added */ ?>
+                        </tr>
                         <?php endforeach; ?>
-                         <?php /* <td></td> Column for Cleaned By if added */ ?>
-                    </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-                <?php 
-                 // Add blank rows if needed?
-                 $rowCount = count($tasks);
-                 $blankRows = max(0, 5 - $rowCount); // Add a few blank rows for notes?
-                 for ($i = 0; $i < $blankRows; $i++):
-                ?>
-                 <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                     <?php /* <td>&nbsp;</td> */ ?>
-                 </tr>
-                <?php endfor; ?>
-            </tbody>
-        </table>
-        
-        <div class="mt-4 no-print">
-             <p><strong>Note:</strong> Initials in the date columns indicate completion by that user.</p>
-        </div>
+                    <?php endif; ?>
+                    <?php 
+                     // Add blank rows if needed?
+                     $rowCount = count($tasks);
+                     $blankRows = max(0, 5 - $rowCount); // Add a few blank rows for notes?
+                     for ($i = 0; $i < $blankRows; $i++):
+                    ?>
+                     <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                         <?php /* <td>&nbsp;</td> */ ?>
+                     </tr>
+                    <?php endfor; ?>
+                </tbody>
+            </table>
+            
+            <!-- This note won't be printed due to no-print class -->
+            <div class="mt-4 no-print">
+                 <p><strong>Note:</strong> Initials in the date columns indicate completion by that user.</p>
+            </div>
+        </div> <!-- end of printable-area -->
 
     <?php endif; // End if location and week selected ?>
 
