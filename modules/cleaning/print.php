@@ -250,7 +250,7 @@ if ($date && $location_id) {
             $loc_id = $log['location_id'];
             if (!isset($location_logs[$loc_id])) {
                 $location_logs[$loc_id] = [
-                    'name' => $log['location_name'],
+                    'name' => $log['name'] ?? 'Unknown Location',
                     'logs' => [],
                     'completed' => 0,
                     'total' => 0
@@ -420,13 +420,13 @@ if ($date && $location_id) {
                     <?php foreach ($cleaning_logs as $log): ?>
                     <tr>
                         <td><?php echo formatDate($log['completed_date'], 'd M Y'); ?></td>
-                        <td><?php echo htmlspecialchars($log['location_name']); ?></td>
-                        <td><?php echo htmlspecialchars($log['task_description']); ?></td>
+                        <td><?php echo !empty($log['location_name']) ? htmlspecialchars($log['location_name']) : htmlspecialchars($log['name'] ?? 'Unknown Location'); ?></td>
+                        <td><?php echo !empty($log['task_description']) ? htmlspecialchars($log['task_description']) : 'Unknown Task'; ?></td>
                         <td class="<?php echo $log['is_completed'] ? 'status-completed' : 'status-incomplete'; ?>">
                             <?php echo $log['is_completed'] ? 'COMPLETED' : 'NOT COMPLETED'; ?>
                         </td>
                         <td><?php echo !empty($log['notes']) ? htmlspecialchars($log['notes']) : ''; ?></td>
-                        <td><?php echo htmlspecialchars($log['recorded_by']); ?></td>
+                        <td><?php echo !empty($log['recorded_by']) ? htmlspecialchars($log['recorded_by']) : 'Unknown'; ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
