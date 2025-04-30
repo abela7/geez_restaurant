@@ -74,11 +74,31 @@ if ($download_requested && !empty($download_type) && !empty($download_month) && 
     
     switch ($download_type) {
         case 'temperature':
-            header('Location: modules/temperature/print_checklist.php?start_date=' . $month_data['start'] . '&end_date=' . $month_data['end']);
+            // Add default equipment_ids parameter
+            $equipment_ids = isset($_GET['equipment_ids']) ? $_GET['equipment_ids'] : [];
+            
+            // If specific equipment IDs are provided, use them
+            // Otherwise, we need to convert month format to the expected 'month' parameter
+            $month_param = date('Y-m', strtotime($month_data['start']));
+            
+            // Redirect to temperature checklist with proper month parameter
+            header('Location: modules/temperature/print_checklist.php?month=' . $month_param . (empty($equipment_ids) ? '' : '&equipment_ids[]=' . implode('&equipment_ids[]=', $equipment_ids)));
             exit;
+            
         case 'cleaning':
-            header('Location: modules/cleaning/print_weekly_checklist.php?start_date=' . $month_data['start'] . '&end_date=' . $month_data['end']);
+            // Handle cleaning checklist (it expects week parameter)
+            $week_requested = isset($_GET['week']) ? $_GET['week'] : '';
+            $location_id = isset($_GET['location_id']) ? $_GET['location_id'] : '';
+            
+            if (!empty($week_requested)) {
+                // If a specific week is requested
+                header('Location: modules/cleaning/print_weekly_checklist.php?week=' . $week_requested . (!empty($location_id) ? '&location_id=' . $location_id : ''));
+            } else {
+                // Default to the monthly view (which will show the form)
+                header('Location: modules/cleaning/print_weekly_checklist.php?start_date=' . $month_data['start'] . '&end_date=' . $month_data['end'] . (!empty($location_id) ? '&location_id=' . $location_id : ''));
+            }
             exit;
+            
         case 'waste':
             header('Location: modules/waste/print_log.php?start_date=' . $month_data['start'] . '&end_date=' . $month_data['end']);
             exit;
@@ -187,12 +207,68 @@ if ($download_requested && !empty($download_type) && !empty($download_month) && 
     <!-- Temperature Checklist Section -->
     <div class="report-section">
         <h3><i class="bi bi-thermometer-half"></i> Temperature Checklist Reports</h3>
-        <div class="month-links">
+        
+        <?php
+        // Get all active equipment for the dropdown
+        $equipmentQuery = "SELECT equipment_id, name, location FROM equipment WHERE is_active = 1 ORDER BY name";
+        $equipmentStmt = $conn->prepare($equipmentQuery);
+        $equipmentStmt->execute();
+        $temperature_equipment = $equipmentStmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Get selected equipment IDs from GET parameters
+        $selected_equipment_ids = isset($_GET['equipment_ids']) ? (array)$_GET['equipment_ids'] : [];
+        ?>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <form method="get" action="" class="row g-3">
+                    <div class="col-md-8">
+                        <label for="equipment_ids" class="form-label">Select Equipment (Optional):</label>
+                        <select class="form-select" id="equipment_ids" name="equipment_ids[]" multiple>
+                            <?php foreach ($temperature_equipment as $equip): ?>
+                            <option value="<?php echo $equip['equipment_id']; ?>" 
+                                <?php echo in_array($equip['equipment_id'], $selected_equipment_ids) ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($equip['name']); ?> 
+                                (<?php echo htmlspecialchars($equip['location'] ?? 'N/A'); ?>)
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple equipment. Leave empty to select later.</small>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-outline-primary">Update Selection</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
             <?php foreach ($months as $month_key => $month_data): ?>
-            <a href="?download=true&type=temperature&month=<?php echo $month_key; ?>" 
-               class="month-link" target="_blank">
-                <i class="bi bi-file-earmark-text"></i> <?php echo $month_data['name']; ?>
-            </a>
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0"><?php echo $month_data['name']; ?></h5>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <p>Temperature checklist for the month of <?php echo $month_data['name']; ?>.</p>
+                        
+                        <?php 
+                        // Create parameter string for equipment IDs
+                        $equipment_params = '';
+                        if (!empty($selected_equipment_ids)) {
+                            foreach ($selected_equipment_ids as $equip_id) {
+                                $equipment_params .= '&equipment_ids[]=' . $equip_id;
+                            }
+                        }
+                        ?>
+                        
+                        <a href="?download=true&type=temperature&month=<?php echo $month_key; ?><?php echo $equipment_params; ?>" 
+                           class="btn btn-primary mt-auto" target="_blank">
+                            <i class="bi bi-file-earmark-text"></i> View <?php echo $month_data['name']; ?> Checklist
+                        </a>
+                    </div>
+                </div>
+            </div>
             <?php endforeach; ?>
         </div>
     </div>
@@ -200,25 +276,124 @@ if ($download_requested && !empty($download_type) && !empty($download_month) && 
     <!-- Weekly Cleaning Checklist Section -->
     <div class="report-section">
         <h3><i class="bi bi-check2-square"></i> Weekly Cleaning Checklist Reports</h3>
-        <div class="month-links">
-            <?php foreach ($months as $month_key => $month_data): ?>
-            <a href="?download=true&type=cleaning&month=<?php echo $month_key; ?>" 
-               class="month-link" target="_blank">
-                <i class="bi bi-file-earmark-text"></i> <?php echo $month_data['name']; ?>
-            </a>
-            <?php endforeach; ?>
+
+        <?php
+        // Get all locations for the dropdown
+        $locationQuery = "SELECT location_id, name FROM cleaning_locations WHERE is_active = 1 ORDER BY name";
+        $locationStmt = $conn->prepare($locationQuery);
+        $locationStmt->execute();
+        $cleaning_locations = $locationStmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Default selected location
+        $selected_location_id = isset($_GET['location_id']) ? $_GET['location_id'] : (count($cleaning_locations) > 0 ? $cleaning_locations[0]['location_id'] : null);
+        ?>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <form method="get" action="" class="row g-3">
+                    <div class="col-md-5">
+                        <label for="location_id" class="form-label">Select Location:</label>
+                        <select class="form-select" id="location_id" name="location_id">
+                            <?php foreach ($cleaning_locations as $loc): ?>
+                            <option value="<?php echo $loc['location_id']; ?>" 
+                                <?php echo ($selected_location_id == $loc['location_id']) ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($loc['name']); ?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-outline-primary">Update Location</button>
+                    </div>
+                </form>
+            </div>
         </div>
+
+        <?php foreach ($months as $month_key => $month_data): ?>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="mb-0"><?php echo $month_data['name']; ?></h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <?php
+                        // Calculate all weeks in this month
+                        $start = new DateTime($month_data['start']);
+                        $end = new DateTime($month_data['end']);
+                        $interval = new DateInterval('P1D'); // 1 day interval
+                        $dateRange = new DatePeriod($start, $interval, $end->modify('+1 day'));
+                        
+                        // Group dates by week
+                        $weeks = [];
+                        foreach ($dateRange as $date) {
+                            $year = $date->format('Y');
+                            $week = $date->format('W');
+                            $week_key = $year . '-W' . $week;
+                            $week_start = clone $date;
+                            // Go to Monday of this week
+                            $week_start->modify('Monday this week');
+                            $week_end = clone $week_start;
+                            $week_end->modify('+6 days'); // To Sunday
+                            
+                            if (!isset($weeks[$week_key])) {
+                                $weeks[$week_key] = [
+                                    'week' => $week_key,
+                                    'start' => $week_start->format('Y-m-d'),
+                                    'end' => $week_end->format('Y-m-d'),
+                                    'name' => 'Week ' . $week . ' (' . $week_start->format('M d') . ' - ' . $week_end->format('M d') . ')'
+                                ];
+                            }
+                        }
+                        
+                        // Sort weeks
+                        ksort($weeks);
+                        
+                        foreach ($weeks as $week_key => $week_data):
+                            // Only include weeks that have at least one day in this month
+                            $week_start = new DateTime($week_data['start']);
+                            $week_end = new DateTime($week_data['end']);
+                            $month_start = new DateTime($month_data['start']);
+                            $month_end = new DateTime($month_data['end']);
+                            
+                            if (($week_start <= $month_end) && ($week_end >= $month_start)):
+                        ?>
+                            <div class="col-md-6 mb-2">
+                                <a href="?download=true&type=cleaning&month=<?php echo $month_key; ?>&week=<?php echo $week_key; ?>&location_id=<?php echo $selected_location_id; ?>" 
+                                   class="btn btn-outline-secondary w-100 text-start" target="_blank">
+                                    <i class="bi bi-calendar-week"></i> <?php echo $week_data['name']; ?>
+                                </a>
+                            </div>
+                        <?php 
+                            endif;
+                        endforeach; 
+                        ?>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
     
     <!-- Food Waste Log Section -->
     <div class="report-section">
         <h3><i class="bi bi-trash"></i> Food Waste Log Reports</h3>
-        <div class="month-links">
+        
+        <div class="row">
             <?php foreach ($months as $month_key => $month_data): ?>
-            <a href="?download=true&type=waste&month=<?php echo $month_key; ?>" 
-               class="month-link" target="_blank">
-                <i class="bi bi-file-earmark-text"></i> <?php echo $month_data['name']; ?>
-            </a>
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0"><?php echo $month_data['name']; ?></h5>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <p>Food waste log entries from <?php echo date('M d', strtotime($month_data['start'])); ?> to <?php echo date('M d', strtotime($month_data['end'])); ?>.</p>
+                        
+                        <a href="?download=true&type=waste&month=<?php echo $month_key; ?>" 
+                           class="btn btn-primary mt-auto" target="_blank">
+                            <i class="bi bi-file-earmark-text"></i> View <?php echo $month_data['name']; ?> Waste Log
+                        </a>
+                    </div>
+                </div>
+            </div>
             <?php endforeach; ?>
         </div>
     </div>
