@@ -277,12 +277,25 @@ if ($selected_location) {
                         </tr>
                     <?php else: ?>
                         <?php 
-                        $task_num = 1; 
-                        foreach ($tasks as $task): 
-                            // Skip monthly tasks in the weekly checklist
-                            if (strtolower($task['frequency']) === 'monthly') {
-                                continue;
+                        $task_num = 1;
+                        $dailyTasks = [];
+                        $weeklyTasks = [];
+                        $monthlyTasks = [];
+                        
+                        // Sort tasks by frequency
+                        foreach ($tasks as $task) {
+                            $frequency = strtolower($task['frequency']);
+                            if ($frequency === 'daily') {
+                                $dailyTasks[] = $task;
+                            } elseif ($frequency === 'weekly') {
+                                $weeklyTasks[] = $task;
+                            } elseif ($frequency === 'monthly') {
+                                $monthlyTasks[] = $task;
                             }
+                        }
+                        
+                        // First display daily tasks
+                        foreach ($dailyTasks as $task): 
                         ?>
                         <tr>
                             <td class="no-col"><?php echo $task_num++; ?></td>
@@ -295,7 +308,44 @@ if ($selected_location) {
                                     ?>
                                 </td>
                             <?php endforeach; ?>
-                             <?php /* <td></td> Column for Cleaned By if added */ ?>
+                        </tr>
+                        <?php endforeach; ?>
+                        
+                        <!-- Weekly Tasks Section -->
+                        <tr>
+                            <td colspan="9" class="bg-light text-center fw-bold">Weekly Tasks</td>
+                        </tr>
+                        <?php foreach ($weeklyTasks as $task): ?>
+                        <tr>
+                            <td class="no-col"><?php echo $task_num++; ?></td>
+                            <td class="task-col"><?php echo htmlspecialchars($task['description']); ?></td>
+                            <?php foreach ($week_dates as $day => $date): ?>
+                                <td class="day-col">
+                                    <?php 
+                                    $user_id_completed = $log_data[$task['task_id']][$date] ?? null;
+                                    echo $user_id_completed ? getCleaningUserInitials($user_id_completed, $db) : '';
+                                    ?>
+                                </td>
+                            <?php endforeach; ?>
+                        </tr>
+                        <?php endforeach; ?>
+                        
+                        <!-- Monthly Tasks Section -->
+                        <tr>
+                            <td colspan="9" class="bg-light text-center fw-bold">Monthly Tasks</td>
+                        </tr>
+                        <?php foreach ($monthlyTasks as $task): ?>
+                        <tr>
+                            <td class="no-col"><?php echo $task_num++; ?></td>
+                            <td class="task-col"><?php echo htmlspecialchars($task['description']); ?></td>
+                            <?php foreach ($week_dates as $day => $date): ?>
+                                <td class="day-col">
+                                    <?php 
+                                    $user_id_completed = $log_data[$task['task_id']][$date] ?? null;
+                                    echo $user_id_completed ? getCleaningUserInitials($user_id_completed, $db) : '';
+                                    ?>
+                                </td>
+                            <?php endforeach; ?>
                         </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
