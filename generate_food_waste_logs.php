@@ -50,72 +50,64 @@ try {
     $locations = $locationStmt->fetchAll(PDO::FETCH_ASSOC);
     echo "<p>Found " . count($locations) . " locations</p>";
     
-    // Menu items for waste logs based on actual restaurant menu with prices
+    // Menu items for waste logs based on actual restaurant menu with prices - REMOVED BEVERAGES
     $menuItems = [
         // Main dishes
-        ['item' => 'Doro Wot', 'price' => 13.99, 'description' => 'Traditional spicy chicken stew with boiled egg in berbere sauce'],
-        ['item' => 'Kitfo', 'price' => 14.99, 'description' => 'Ethiopian style steak tartare, seasoned with mitmita and herb butter'],
-        ['item' => 'Bozena Shiro', 'price' => 12.99, 'description' => 'Spiced chickpea flour stew with diced beef'],
-        ['item' => 'Key Wot', 'price' => 11.99, 'description' => 'Spicy beef stew in rich berbere sauce'],
-        ['item' => 'Special Tibs', 'price' => 15.99, 'description' => 'Prime beef cubes pan-fried with rosemary, onions, tomatoes and peppers'],
-        ['item' => 'Awaze Tibs', 'price' => 13.99, 'description' => 'Spicy marinated beef cubes with special awaze sauce'],
-        ['item' => 'Dulet', 'price' => 13.99, 'description' => 'Minced meat cooked with liver, tripe and Ethiopian spices'],
-        ['item' => 'Gored Gored', 'price' => 13.99, 'description' => 'Cubed raw beef with berbere and spiced butter'],
-        ['item' => 'Zilzil Tibs', 'price' => 14.99, 'description' => 'Strips of beef sautéed with onions, tomatoes and jalapeños'],
-        ['item' => 'Lamb Tibs', 'price' => 14.99, 'description' => 'Sautéed lamb cubes with herbs, onions and peppers'],
-        ['item' => 'Fish Dulet', 'price' => 12.99, 'description' => 'Minced fish cooked with Ethiopian herbs and spices'],
-        ['item' => 'Rice with Beef', 'price' => 12.99, 'description' => 'Seasoned rice with slow-cooked beef'],
+        ['item' => 'Doro Wot', 'price' => 13.99, 'description' => 'Traditional spicy chicken stew with boiled egg in berbere sauce', 'frequency' => 'regular'],
+        ['item' => 'Kitfo', 'price' => 14.99, 'description' => 'Ethiopian style steak tartare, seasoned with mitmita and herb butter', 'frequency' => 'regular'],
+        ['item' => 'Bozena Shiro', 'price' => 12.99, 'description' => 'Spiced chickpea flour stew with diced beef', 'frequency' => 'regular'],
+        ['item' => 'Key Wot', 'price' => 11.99, 'description' => 'Spicy beef stew in rich berbere sauce', 'frequency' => 'regular'],
+        ['item' => 'Special Tibs', 'price' => 15.99, 'description' => 'Prime beef cubes pan-fried with rosemary, onions, tomatoes and peppers', 'frequency' => 'regular'],
+        ['item' => 'Awaze Tibs', 'price' => 13.99, 'description' => 'Spicy marinated beef cubes with special awaze sauce', 'frequency' => 'regular'],
+        ['item' => 'Dulet', 'price' => 13.99, 'description' => 'Minced meat cooked with liver, tripe and Ethiopian spices', 'frequency' => 'regular'],
+        ['item' => 'Gored Gored', 'price' => 13.99, 'description' => 'Cubed raw beef with berbere and spiced butter', 'frequency' => 'regular'],
+        ['item' => 'Zilzil Tibs', 'price' => 14.99, 'description' => 'Strips of beef sautéed with onions, tomatoes and jalapeños', 'frequency' => 'regular'],
+        ['item' => 'Lamb Tibs', 'price' => 14.99, 'description' => 'Sautéed lamb cubes with herbs, onions and peppers', 'frequency' => 'regular'],
+        ['item' => 'Fish Dulet', 'price' => 12.99, 'description' => 'Minced fish cooked with Ethiopian herbs and spices', 'frequency' => 'regular'],
+        ['item' => 'Rice with Beef', 'price' => 12.99, 'description' => 'Seasoned rice with slow-cooked beef', 'frequency' => 'regular'],
         
         // Vegan/Vegetarian dishes
-        ['item' => 'Beyaynetu', 'price' => 11.99, 'description' => 'Mixed vegan platter with various vegetable and legume dishes'],
-        ['item' => 'Shiro', 'price' => 10.99, 'description' => 'Smooth chickpea flour stew with Ethiopian spices'],
-        ['item' => 'Misir Wot', 'price' => 9.99, 'description' => 'Red lentil stew spiced with berbere'],
-        ['item' => 'Kik Alicha', 'price' => 9.99, 'description' => 'Yellow split pea stew with turmeric and herbs'],
-        ['item' => 'Gomen', 'price' => 8.99, 'description' => 'Sautéed collard greens with garlic and spices'],
-        ['item' => 'Atkilt Wot', 'price' => 9.99, 'description' => 'Mixed vegetable stew with potatoes, carrots and cabbage'],
-        ['item' => 'Fosolia', 'price' => 8.99, 'description' => 'Green beans and carrots sautéed with onions'],
-        ['item' => 'Injera Firfir', 'price' => 9.99, 'description' => 'Torn injera pieces mixed with berbere sauce and spices'],
-        ['item' => 'Azifa', 'price' => 6.99, 'description' => 'Cold green lentil salad with mustard, lemon and herbs'],
+        ['item' => 'Beyaynetu', 'price' => 11.99, 'description' => 'Mixed vegan platter with various vegetable and legume dishes', 'frequency' => 'regular'],
+        ['item' => 'Shiro', 'price' => 10.99, 'description' => 'Smooth chickpea flour stew with Ethiopian spices', 'frequency' => 'regular'],
+        ['item' => 'Misir Wot', 'price' => 9.99, 'description' => 'Red lentil stew spiced with berbere', 'frequency' => 'regular'],
+        ['item' => 'Kik Alicha', 'price' => 9.99, 'description' => 'Yellow split pea stew with turmeric and herbs', 'frequency' => 'regular'],
+        ['item' => 'Gomen', 'price' => 8.99, 'description' => 'Sautéed collard greens with garlic and spices', 'frequency' => 'regular'],
+        ['item' => 'Atkilt Wot', 'price' => 9.99, 'description' => 'Mixed vegetable stew with potatoes, carrots and cabbage', 'frequency' => 'regular'],
+        ['item' => 'Fosolia', 'price' => 8.99, 'description' => 'Green beans and carrots sautéed with onions', 'frequency' => 'regular'],
+        ['item' => 'Injera Firfir', 'price' => 9.99, 'description' => 'Torn injera pieces mixed with berbere sauce and spices', 'frequency' => 'regular'],
+        ['item' => 'Azifa', 'price' => 6.99, 'description' => 'Cold green lentil salad with mustard, lemon and herbs', 'frequency' => 'regular'],
         
         // Combination platters
-        ['item' => 'Mahberawi', 'price' => 44.99, 'description' => 'Mixed meat platter for two with doro wot, key wot and tibs'],
-        ['item' => 'Yefsik Mahberawi', 'price' => 54.99, 'description' => 'Family combination platter for four people with various meat dishes'],
-        ['item' => 'Ge\'ez Special', 'price' => 41.99, 'description' => 'Signature platter with chef\'s selection of meat and vegetable dishes'],
-        ['item' => 'Vegetarian Combo', 'price' => 34.99, 'description' => 'Combination of all vegan dishes for two people'],
+        ['item' => 'Mahberawi', 'price' => 44.99, 'description' => 'Mixed meat platter for two with doro wot, key wot and tibs', 'frequency' => 'regular'],
+        ['item' => 'Yefsik Mahberawi', 'price' => 54.99, 'description' => 'Family combination platter for four people with various meat dishes', 'frequency' => 'regular'],
+        ['item' => 'Ge\'ez Special', 'price' => 41.99, 'description' => 'Signature platter with chef\'s selection of meat and vegetable dishes', 'frequency' => 'regular'],
+        ['item' => 'Vegetarian Combo', 'price' => 34.99, 'description' => 'Combination of all vegan dishes for two people', 'frequency' => 'regular'],
         
-        // Ingredients and prepped items
-        ['item' => 'Berbere Spice', 'price' => 8.50, 'description' => 'House-made Ethiopian chili spice blend'],
-        ['item' => 'Injera', 'price' => 3.99, 'description' => 'Fermented teff flour flatbread'],
-        ['item' => 'Niter Kibbeh', 'price' => 7.50, 'description' => 'Clarified butter infused with Ethiopian herbs and spices'],
-        ['item' => 'Mitmita Spice', 'price' => 8.50, 'description' => 'Spicy chili powder blend with cardamom and cloves'],
-        ['item' => 'Shiro Powder', 'price' => 9.99, 'description' => 'Ground chickpea flour with Ethiopian spices'],
-        ['item' => 'Teff Flour', 'price' => 12.99, 'description' => 'Fine Ethiopian grain flour for injera'],
-        ['item' => 'Kocho', 'price' => 11.99, 'description' => 'Fermented enset (false banana) bread'],
-        ['item' => 'Awaze Sauce', 'price' => 5.99, 'description' => 'Spicy paste made with berbere and Ethiopian spices'],
-        
-        // Beverages
-        ['item' => 'Ethiopian Coffee', 'price' => 4.50, 'description' => 'Traditional coffee served in jebena'],
-        ['item' => 'Tej', 'price' => 6.99, 'description' => 'Ethiopian honey wine'],
-        ['item' => 'St. George Beer', 'price' => 5.99, 'description' => 'Ethiopian lager beer'],
-        ['item' => 'Spris', 'price' => 4.99, 'description' => 'Layered mixed fruit juice'],
-        ['item' => 'Mango Juice', 'price' => 3.99, 'description' => 'Fresh mango juice'],
-        ['item' => 'Avocado Juice', 'price' => 4.50, 'description' => 'Fresh avocado smoothie with honey'],
+        // Ingredients and prepped items - MARKED AS RARE
+        ['item' => 'Berbere Spice', 'price' => 8.50, 'description' => 'House-made Ethiopian chili spice blend', 'frequency' => 'rare'],
+        ['item' => 'Injera', 'price' => 3.99, 'description' => 'Fermented teff flour flatbread', 'frequency' => 'regular'],
+        ['item' => 'Niter Kibbeh', 'price' => 7.50, 'description' => 'Clarified butter infused with Ethiopian herbs and spices', 'frequency' => 'rare'],
+        ['item' => 'Mitmita Spice', 'price' => 8.50, 'description' => 'Spicy chili powder blend with cardamom and cloves', 'frequency' => 'rare'],
+        ['item' => 'Shiro Powder', 'price' => 9.99, 'description' => 'Ground chickpea flour with Ethiopian spices', 'frequency' => 'rare'],
+        ['item' => 'Teff Flour', 'price' => 12.99, 'description' => 'Fine Ethiopian grain flour for injera', 'frequency' => 'rare'],
+        ['item' => 'Kocho', 'price' => 11.99, 'description' => 'Fermented enset (false banana) bread', 'frequency' => 'rare'],
+        ['item' => 'Awaze Sauce', 'price' => 5.99, 'description' => 'Spicy paste made with berbere and Ethiopian spices', 'frequency' => 'rare'],
         
         // Appetizers and sides
-        ['item' => 'Sambusa', 'price' => 5.99, 'description' => 'Crispy pastry filled with lentils or meat'],
-        ['item' => 'Kategna', 'price' => 6.99, 'description' => 'Toasted injera with berbere and niter kibbeh'],
-        ['item' => 'Ayib', 'price' => 4.99, 'description' => 'Mild Ethiopian cottage cheese'],
-        ['item' => 'Fitfit', 'price' => 8.99, 'description' => 'Torn injera mixed with berbere sauce and vegetables']
+        ['item' => 'Sambusa', 'price' => 5.99, 'description' => 'Crispy pastry filled with lentils or meat', 'frequency' => 'regular'],
+        ['item' => 'Kategna', 'price' => 6.99, 'description' => 'Toasted injera with berbere and niter kibbeh', 'frequency' => 'regular'],
+        ['item' => 'Ayib', 'price' => 4.99, 'description' => 'Mild Ethiopian cottage cheese', 'frequency' => 'regular'],
+        ['item' => 'Fitfit', 'price' => 8.99, 'description' => 'Torn injera mixed with berbere sauce and vegetables', 'frequency' => 'regular']
     ];
     
-    // Possible reasons for waste with realistic distribution
+    // Possible reasons for waste with realistic distribution - INCREASED CUSTOMER RETURN PROBABILITY
     $wasteReasons = [
-        'Expired' => 15,
-        'Spoiled' => 20,
-        'Overproduction' => 30, // Increased as most common
+        'Expired' => 10,
+        'Spoiled' => 15,
+        'Overproduction' => 20,
         'Preparation Error' => 15,
-        'Customer Return' => 8,
-        'Quality Control' => 7,
+        'Customer Return' => 30, // Made this the most common reason (30%)
+        'Quality Control' => 5,
         'Contamination' => 3,
         'Equipment Failure' => 1, 
         'Power Outage' => 1
@@ -127,9 +119,10 @@ try {
     echo "<p><strong>Important Information:</strong></p>";
     echo "<ul>";
     echo "<li>This will create realistic food waste logs for your Ethiopian restaurant</li>";
-    echo "<li>Waste events will occur with varying frequency (not daily, but 1-3 times per week)</li>";
+    echo "<li>Waste events will occur infrequently (max 2 per week, no more than 5 per month)</li>";
     echo "<li>Only users 5, 6, and 8 will be assigned as recorders</li>";
-    echo "<li>Various waste reasons will be used with realistic distribution</li>";
+    echo "<li>Various waste reasons will be used with customer returns being most common</li>";
+    echo "<li>Flour and staple ingredients will be wasted very rarely (max once every 2 months)</li>";
     echo "</ul>";
     echo "<p>Date range: " . $startDate->format('Y-m-d') . " to " . $endDate->format('Y-m-d') . "</p>";
     
@@ -179,44 +172,94 @@ try {
                 $lastWasteDates[$item['item']] = null;
             }
             
+            // Keep track of waste events per month to limit to 5
+            $wasteCountsByMonth = [];
+            $currentMonth = $startDate->format('Y-m');
+            $wasteCountsByMonth[$currentMonth] = 0;
+            
+            // Keep track of waste events per week to limit to 2
+            $wasteCountsByWeek = [];
+            $currentWeek = $startDate->format('YW');
+            $wasteCountsByWeek[$currentWeek] = 0;
+            
             // Create random waste logs with realistic patterns
             while ($currentDate <= $endDate) {
                 $dateString = $currentDate->format('Y-m-d');
-                $dayOfWeek = $currentDate->format('N'); // 1 (Monday) to 7 (Sunday)
+                $currentMonth = $currentDate->format('Y-m');
+                $currentWeek = $currentDate->format('YW'); // ISO week number
                 
-                // Determine if waste happens on this day
+                // Initialize counters if not set
+                if (!isset($wasteCountsByMonth[$currentMonth])) {
+                    $wasteCountsByMonth[$currentMonth] = 0;
+                }
+                if (!isset($wasteCountsByWeek[$currentWeek])) {
+                    $wasteCountsByWeek[$currentWeek] = 0;
+                }
+                
+                // Skip if we've already hit our monthly limit
+                if ($wasteCountsByMonth[$currentMonth] >= 5) {
+                    $currentDate->modify('+1 day');
+                    continue;
+                }
+                
+                // Skip if we've already hit our weekly limit
+                if ($wasteCountsByWeek[$currentWeek] >= 2) {
+                    $currentDate->modify('+1 day');
+                    continue;
+                }
+                
+                // Determine if waste happens on this day (much lower probability now)
+                // Base chance is now just 10%
+                $wasteChance = 10;
+                
                 // Higher chance on weekends (busier restaurant days)
-                $wasteChance = ($dayOfWeek >= 6) ? 45 : 30; // 45% chance on weekends, 30% on weekdays
-                
-                // Higher chance at month beginning and end (inventory turnover)
-                $dayOfMonth = $currentDate->format('j');
-                if ($dayOfMonth <= 3 || $dayOfMonth >= 27) {
-                    $wasteChance += 10; // Additional 10% chance at month beginning/end
+                $dayOfWeek = $currentDate->format('N'); // 1 (Monday) to 7 (Sunday)
+                if ($dayOfWeek >= 6) {
+                    $wasteChance += 5; // Additional 5% chance on weekends
                 }
                 
                 if (mt_rand(1, 100) <= $wasteChance) {
-                    // Determine how many waste entries for this day (1-3)
-                    $numWasteEntries = mt_rand(1, 3);
+                    // Determine how many waste entries for this day (1 most of the time, rarely 2)
+                    $numWasteEntries = (mt_rand(1, 100) <= 15) ? 2 : 1;
+                    
+                    // Make sure we don't exceed weekly limit
+                    $numWasteEntries = min($numWasteEntries, 2 - $wasteCountsByWeek[$currentWeek]);
+                    
+                    // Make sure we don't exceed monthly limit
+                    $numWasteEntries = min($numWasteEntries, 5 - $wasteCountsByMonth[$currentMonth]);
                     
                     // Shuffle menu items to randomize selection
                     shuffle($menuItems);
                     
                     for ($i = 0; $i < $numWasteEntries; $i++) {
-                        // Find an item that hasn't been wasted recently (at least 7 days gap)
-                        $selectedItem = null;
-                        foreach ($menuItems as $item) {
-                            if (!isset($lastWasteDates[$item['item']]) || 
-                                $lastWasteDates[$item['item']] === null || 
-                                $currentDate->diff($lastWasteDates[$item['item']])->days >= 7) {
-                                $selectedItem = $item;
-                                break;
+                        // First, filter out rare items that were recently wasted (in last 60 days)
+                        $availableItems = array_filter($menuItems, function($item) use ($currentDate, $lastWasteDates) {
+                            // Skip rare items (like flour) if wasted in the last 60 days
+                            if ($item['frequency'] === 'rare' && 
+                                isset($lastWasteDates[$item['item']]) && 
+                                $lastWasteDates[$item['item']] !== null && 
+                                $currentDate->diff($lastWasteDates[$item['item']])->days < 60) {
+                                return false;
                             }
+                            
+                            // Regular items need at least 14 days between waste events
+                            if ($item['frequency'] === 'regular' && 
+                                isset($lastWasteDates[$item['item']]) && 
+                                $lastWasteDates[$item['item']] !== null && 
+                                $currentDate->diff($lastWasteDates[$item['item']])->days < 14) {
+                                return false;
+                            }
+                            
+                            return true;
+                        });
+                        
+                        // If no items are available, skip this waste entry
+                        if (empty($availableItems)) {
+                            continue;
                         }
                         
-                        // If all items were recently wasted, just pick a random one
-                        if ($selectedItem === null) {
-                            $selectedItem = $menuItems[array_rand($menuItems)];
-                        }
+                        // Select random item from available ones
+                        $selectedItem = $availableItems[array_rand($availableItems)];
                         
                         // Record this waste date for the item
                         $lastWasteDates[$selectedItem['item']] = clone $currentDate;
@@ -234,15 +277,19 @@ try {
                             }
                         }
                         
-                        // Generate random weight (realistic for food waste: 0.1 - 3.0 kg)
-                        $weight = round(mt_rand(10, 300) / 100, 2);
+                        // Generate random weight (realistic for food waste: 0.1 - 2.0 kg, smaller amounts now)
+                        $weight = round(mt_rand(10, 200) / 100, 2);
                         
                         // Calculate total cost based on weight and cost per unit
                         $totalCost = round($weight * $selectedItem['price'], 2);
                         
-                        // Determine waste type (mostly preparation)
-                        $wasteTypes = ['Preparation', 'Production', 'Service', 'Storage'];
-                        $wasteType = $wasteTypes[array_rand($wasteTypes)];
+                        // Determine waste type (mostly preparation or customer return)
+                        $wasteTypes = ['Preparation', 'Service', 'Storage'];
+                        if ($selectedReason === 'Customer Return') {
+                            $wasteType = 'Service';
+                        } else {
+                            $wasteType = $wasteTypes[array_rand($wasteTypes)];
+                        }
                         
                         // Generate a random time for the waste (between 8am and 10pm)
                         $hour = mt_rand(8, 22);
@@ -291,8 +338,6 @@ try {
                                 $noteOptions = [
                                     'Item past use-by date during inventory check',
                                     'Berbere spice mix lost potency and aroma',
-                                    'Tej batch fermented too long',
-                                    'Prepared injera batter fermented beyond usable stage',
                                     'Prepped ingredients stored too long'
                                 ];
                                 $notes = $noteOptions[array_rand($noteOptions)];
@@ -301,9 +346,7 @@ try {
                                 $noteOptions = [
                                     'Visual inspection showed signs of spoilage',
                                     'Raw meat showed discoloration',
-                                    'Off odor detected in prepared stew',
-                                    'Mold found on injera batch',
-                                    'Prepped vegetables wilted and unusable'
+                                    'Off odor detected in prepared stew'
                                 ];
                                 $notes = $noteOptions[array_rand($noteOptions)];
                                 break;
@@ -311,9 +354,7 @@ try {
                                 $noteOptions = [
                                     'Excess prepared for slower than expected service',
                                     'Too many combination platters prepped for quiet evening',
-                                    'Doro Wot batch exceeded dinner service needs',
-                                    'Excess injera prepared for anticipated large group that canceled',
-                                    'Too much tibs prepared for weekday service'
+                                    'Excess prepared for anticipated large group that canceled'
                                 ];
                                 $notes = $noteOptions[array_rand($noteOptions)];
                                 break;
@@ -341,9 +382,7 @@ try {
                                 $noteOptions = [
                                     'Injera texture not meeting standards',
                                     'Berbere batch inconsistent with house flavor profile',
-                                    'Stew viscosity too thin for service standards',
-                                    'Color of sauce not vibrant enough for plating',
-                                    'Niter kibbeh clarification incomplete'
+                                    'Stew viscosity too thin for service standards'
                                 ];
                                 $notes = $noteOptions[array_rand($noteOptions)];
                                 break;
@@ -351,29 +390,21 @@ try {
                                 $noteOptions = [
                                     'Cross-contamination between raw and cooked meat',
                                     'Allergen contamination in vegetarian dish preparation',
-                                    'Foreign object found during final inspection',
-                                    'Cleaning solution residue detected',
-                                    'Contact with non-food grade surface'
+                                    'Foreign object found during final inspection'
                                 ];
                                 $notes = $noteOptions[array_rand($noteOptions)];
                                 break;
                             case 'Equipment Failure':
                                 $noteOptions = [
                                     'Refrigeration unit malfunction affected stored items',
-                                    'Injera griddle temperature inconsistency ruined batch',
-                                    'Freezer failure overnight affected meat quality',
-                                    'Water filter system failure affected coffee preparation',
-                                    'Hood ventilation failure caused smoke contamination'
+                                    'Injera griddle temperature inconsistency ruined batch'
                                 ];
                                 $notes = $noteOptions[array_rand($noteOptions)];
                                 break;
                             case 'Power Outage':
                                 $noteOptions = [
                                     'Brief power cut affected refrigeration',
-                                    'Extended outage required disposal of temperature-sensitive items',
-                                    'Power surge damaged heating equipment mid-cooking',
-                                    'Backup generator failed to activate during outage',
-                                    'Overnight power loss compromised prepped items'
+                                    'Extended outage required disposal of temperature-sensitive items'
                                 ];
                                 $notes = $noteOptions[array_rand($noteOptions)];
                                 break;
@@ -403,6 +434,10 @@ try {
                         ]);
                         
                         $totalInserted++;
+                        
+                        // Update our weekly and monthly counters
+                        $wasteCountsByWeek[$currentWeek]++;
+                        $wasteCountsByMonth[$currentMonth]++;
                     }
                 }
                 
@@ -428,9 +463,14 @@ try {
             $totalWeeks = ceil($totalDays / 7);
             $avgWastePerWeek = round($totalInserted / $totalWeeks, 1);
             
+            // Calculate average waste events per month
+            $totalMonths = ceil($totalDays / 30);
+            $avgWastePerMonth = round($totalInserted / $totalMonths, 1);
+            
             echo "<h2 style='color:green'>Success!</h2>";
             echo "<p>Successfully created {$totalInserted} food waste log entries over {$totalWeeks} weeks.</p>";
             echo "<p>Average of {$avgWastePerWeek} waste events per week.</p>";
+            echo "<p>Average of {$avgWastePerMonth} waste events per month.</p>";
             echo "<p><a href='modules/waste/index.php' class='btn' style='background-color:#007bff; color:white; padding:5px 10px; text-decoration:none; display:inline-block;'>View Food Waste Logs</a></p>";
             
         } catch (Exception $e) {
