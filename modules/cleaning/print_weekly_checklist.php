@@ -276,8 +276,14 @@ if ($selected_location) {
                             <td colspan="10" class="text-center text-muted">No cleaning tasks found for this location.</td>
                         </tr>
                     <?php else: ?>
-                        <?php $task_num = 1; ?>
-                        <?php foreach ($tasks as $task): ?>
+                        <?php 
+                        $task_num = 1; 
+                        foreach ($tasks as $task): 
+                            // Skip monthly tasks in the weekly checklist
+                            if (strtolower($task['frequency']) === 'monthly') {
+                                continue;
+                            }
+                        ?>
                         <tr>
                             <td class="no-col"><?php echo $task_num++; ?></td>
                             <td class="task-col"><?php echo htmlspecialchars($task['description']); ?></td>
