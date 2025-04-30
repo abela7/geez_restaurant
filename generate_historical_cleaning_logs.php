@@ -56,6 +56,14 @@ $current_date = clone $start_date;
 // Track which monthly tasks have been completed each month to avoid duplicates
 $monthly_completions = [];
 
+// Helper function to check if log exists
+function logExists($db, $task_id, $completed_date) {
+    $query = "SELECT COUNT(*) as count FROM cleaning_logs 
+              WHERE task_id = ? AND completed_date = ?";
+    $result = $db->fetchRow($query, [$task_id, $completed_date]);
+    return ($result && $result['count'] > 0);
+}
+
 // Process each location
 foreach ($locations as $location) {
     $location_id = $location['location_id'];
@@ -95,8 +103,8 @@ foreach ($locations as $location) {
                 // Randomly select a staff member
                 $user_id = $staff_ids[array_rand($staff_ids)];
                 
-                // Check if this log already exists
-                $existing = $log_model->checkExists($task['task_id'], $date_string);
+                // Check if this log already exists using our helper function
+                $existing = logExists($db, $task['task_id'], $date_string);
                 if (!$existing) {
                     // Insert the cleaning log
                     $log_model->create([
@@ -120,8 +128,8 @@ foreach ($locations as $location) {
                     // Randomly select a staff member
                     $user_id = $staff_ids[array_rand($staff_ids)];
                     
-                    // Check if this log already exists
-                    $existing = $log_model->checkExists($task['task_id'], $date_string);
+                    // Check if this log already exists using our helper function
+                    $existing = logExists($db, $task['task_id'], $date_string);
                     if (!$existing) {
                         // Insert the cleaning log
                         $log_model->create([
@@ -142,6 +150,8 @@ foreach ($locations as $location) {
         // Move to next day
         $current_date->modify('+1 day');
     }
+    
+    echo "Completed processing for location: " . $location['name'] . "<br>";
 }
 
 echo "<hr>";
