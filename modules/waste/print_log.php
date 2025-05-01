@@ -194,7 +194,6 @@ $page_title = 'Food Waste Log (' . formatDate($start_date, 'd/m/y') . ' - ' . fo
              <tr>
                  <td><strong>Period:</strong> <?php echo formatDate($start_date, 'd/m/y'); ?> - <?php echo formatDate($end_date, 'd/m/y'); ?></td>
                  <td><strong>Facility:</strong> <?php echo APP_NAME; /* Or other identifier */ ?></td>
-                 <td><strong>Generated:</strong> <?php echo date('d/m/y H:i'); ?></td>
              </tr>
          </table>
     </div>
@@ -249,7 +248,7 @@ $page_title = 'Food Waste Log (' . formatDate($start_date, 'd/m/y') . ' - ' . fo
 
     <!-- Footer for printed page -->
     <div class="mt-4 avoid-break">
-        <p class="small text-muted">Generated from Geez Restaurant Management System on <?php echo date('d/m/Y H:i'); ?></p>
+        <p class="small text-muted">Geez Restaurant Management System</p>
     </div>
 
 </div> <!-- /container -->
