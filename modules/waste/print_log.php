@@ -193,7 +193,7 @@ $page_title = 'Food Waste Log (' . formatDate($start_date, 'd/m/y') . ' - ' . fo
          <table class="header-details-table w-100">
              <tr>
                  <td><strong>Period:</strong> <?php echo formatDate($start_date, 'd/m/y'); ?> - <?php echo formatDate($end_date, 'd/m/y'); ?></td>
-                 <td><strong>Facility:</strong> <?php echo APP_NAME; /* Or other identifier */ ?></td>
+                 <td><strong>Facility:</strong> Geez Restaurant</td>
              </tr>
          </table>
     </div>
@@ -209,13 +209,12 @@ $page_title = 'Food Waste Log (' . formatDate($start_date, 'd/m/y') . ' - ' . fo
                 <th class="num-col">Cost/Unit</th>
                 <th class="num-col">Total Cost</th>
                 <th class="text-col">Recorded By</th>
-                <th>Initials</th>
             </tr>
         </thead>
         <tbody>
             <?php if (empty($waste_logs)): ?>
                 <tr>
-                    <td colspan="9" class="text-center text-muted">No food waste recorded for this period.</td>
+                    <td colspan="8" class="text-center text-muted">No food waste recorded for this period.</td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($waste_logs as $log): ?>
@@ -228,7 +227,6 @@ $page_title = 'Food Waste Log (' . formatDate($start_date, 'd/m/y') . ' - ' . fo
                     <td class="num-col"><?php echo isset($log['cost_per_unit']) ? formatCurrency($log['cost_per_unit']) : 'N/A'; ?></td>
                     <td class="num-col"><?php echo formatCurrency($log['total_cost'] ?? 0); ?></td>
                     <td class="text-col"><?php echo htmlspecialchars($log['recorded_by'] ?? 'N/A'); ?></td>
-                    <td><?php echo getWasteUserInitials($log['recorded_by_user_id'], $db); ?></td>
                 </tr>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -240,7 +238,7 @@ $page_title = 'Food Waste Log (' . formatDate($start_date, 'd/m/y') . ' - ' . fo
              for ($i = 0; $i < $blankRows; $i++):
              ?>
              <tr>
-                <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+                <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
              </tr>
             <?php endfor; ?>
         </tbody>
